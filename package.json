@@ -1,0 +1,9 @@
+{
+  "name": "flores-fle-netlify",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "latest",
+    "@netlify/database": "latest"
+  }
+}
