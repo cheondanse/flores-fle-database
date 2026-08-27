@@ -4,1101 +4,295 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Flores – A1/A2 commerces & circuit papal B1</title>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
 <style>
-:root{
-  --bg:#f6f7f9;
-  --card:#fff;
-  --ink:#17202a;
-  --muted:#667085;
-  --line:#d8dee8;
-  --blue:#245bd8;
-  --orange:#a65f13;
-  --green:#18724a;
-  --red:#a8322b;
-  --soft:#eef2f7
-}
-
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--ink)
-}
-
-header{
-  background:#fff;
-  border-bottom:1px solid var(--line);
-  padding:16px
-}
-
-h1{
-  margin:0 0 5px;
-  font-size:clamp(1.35rem,4vw,2rem)
-}
-
-header p{
-  margin:0;
-  color:var(--muted)
-}
-
-.tabs,.toolbar{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px
-}
-
-.tab{
-  border:1px solid var(--line);
-  background:#fff;
-  border-radius:999px;
-  padding:10px 14px
-}
-
-.tab.active{
-  background:var(--blue);
-  color:#fff;
-  border-color:var(--blue)
-}
-
-main{
-  max-width:1300px;
-  margin:auto;
-  padding:14px
-}
-
-.panel{display:none}
-.panel.active{display:block}
-
-.layout{
-  display:grid;
-  grid-template-columns:400px minmax(0,1fr);
-  gap:14px
-}
-
-.stack{
-  display:grid;
-  gap:14px
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:14px
-}
-
-h2,h3{margin:0 0 8px}
-
-.hint,.small{
-  font-size:.9rem;
-  color:var(--muted);
-  line-height:1.45
-}
-
-label{
-  display:block;
-  font-weight:650;
-  margin-top:9px
-}
-
-input,select,textarea,button{
-  font:inherit
-}
-
-input,select,textarea{
-  width:100%;
-  padding:10px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  background:#fff;
-  font-size:16px
-}
-
-textarea{
-  min-height:78px;
-  resize:vertical
-}
-
-button{
-  border:0;
-  border-radius:10px;
-  padding:10px 12px;
-  cursor:pointer;
-  min-height:44px
-}
-
-button:disabled{opacity:.5}
-
-.primary{
-  background:var(--blue);
-  color:#fff
-}
-
-.secondary{
-  background:var(--soft)
-}
-
-.good{
-  background:#e8f6ef;
-  color:var(--green)
-}
-
-.danger{
-  background:#ffe9e7;
-  color:var(--red)
-}
-
-.two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px
-}
-
-.status{
-  min-height:1.25em;
-  color:var(--green);
-  font-size:.9rem;
-  margin-top:8px
-}
-
-.online{
-  padding:8px 10px;
-  border-radius:10px;
-  background:#e8f6ef;
-  color:#176b45;
-  font-size:.88rem;
-  margin-top:10px
-}
-
-.offline{
-  background:#fff2df;
-  color:#7a470b
-}
-
-#mapA,#mapB{
-  height:700px;
-  border:1px solid var(--line);
-  border-radius:14px
-}
-
-.badge{
-  display:inline-block;
-  padding:3px 7px;
-  border-radius:999px;
-  background:var(--soft);
-  font-size:.78rem;
-  margin:2px 4px 2px 0
-}
-
-.entry,.recording{
-  border-top:1px solid var(--line);
-  padding:10px 0
-}
-
-.student-marker{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  background:#fff;
-  border:3px solid var(--orange);
-  font-weight:800;
-  font-size:11px;
-  box-shadow:0 1px 4px #0004
-}
-
-.student-marker.b1{
-  border-color:var(--blue)
-}
-
-.step{
-  border:1px solid var(--line);
-  border-radius:11px;
-  padding:10px;
-  margin-top:8px;
-  cursor:pointer
-}
-
-.step.active{
-  border-color:var(--blue)
-}
-
-.stepTitle{
-  font-weight:750
-}
-
-.poster{
-  border:1px solid var(--line);
-  border-radius:15px;
-  background:linear-gradient(145deg,#fff,#f3f6fb);
-  padding:15px;
-  min-height:200px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between
-}
-
-.poster .title{
-  font-size:1.15rem;
-  font-weight:800
-}
-
-.poster .quote{
-  font-size:1rem;
-  line-height:1.45;
-  margin:10px 0
-}
-
-.poster img{
-  width:100%;
-  max-height:180px;
-  object-fit:cover;
-  border-radius:10px;
-  margin:10px 0
-}
-
-.poster .by{
-  font-size:.9rem;
-  color:var(--muted)
-}
-
-audio{
-  width:100%;
-  margin-top:8px
-}
-
-.micBox{
-  padding:10px;
-  border-radius:10px;
-  background:#fff6e8;
-  color:#74460f;
-  font-size:.9rem
-}
-
-.recordDot{
-  display:inline-block;
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#c62828;
-  margin-right:6px
-}
-
-@media(max-width:930px){
-  .layout{grid-template-columns:1fr}
-  .two{grid-template-columns:1fr}
-  #mapA,#mapB{height:520px}
-}
+:root{--bg:#f6f7f9;--card:#fff;--ink:#17202a;--muted:#667085;--line:#d8dee8;--blue:#245bd8;--orange:#a65f13;--green:#18724a;--red:#a8322b;--soft:#eef2f7}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#fff;border-bottom:1px solid var(--line);padding:16px}header h1{margin:0 0 5px;font-size:clamp(1.35rem,4vw,2rem)}header p{margin:0;color:var(--muted)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 14px;cursor:pointer}.tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+main{max-width:1300px;margin:auto;padding:14px}.panel{display:none}.panel.active{display:block}.layout{display:grid;grid-template-columns:400px minmax(0,1fr);gap:14px}.stack{display:grid;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}h2,h3{margin:0 0 8px}h2{font-size:1.12rem}h3{font-size:1rem}.small,.hint{font-size:.9rem;color:var(--muted);line-height:1.45}
+label{display:block;font-weight:650;margin-top:9px}input,select,textarea,button{font:inherit}input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:16px}
+textarea{min-height:78px;resize:vertical}button{border:0;border-radius:10px;padding:10px 12px;cursor:pointer;min-height:44px}button:disabled{opacity:.5;cursor:not-allowed}
+.primary{background:var(--blue);color:#fff}.secondary{background:var(--soft);color:var(--ink)}.good{background:#e8f6ef;color:var(--green)}.warn{background:#fff2df;color:#7a470b}.danger{background:#ffe9e7;color:var(--red)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.status{min-height:1.25em;color:var(--green);font-size:.9rem;margin-top:8px}
+#mapA,#mapB{height:700px;border:1px solid var(--line);border-radius:14px}.badge{display:inline-block;padding:3px 7px;border-radius:999px;background:var(--soft);font-size:.78rem;margin:2px 4px 2px 0}
+.entry{border-top:1px solid var(--line);padding:10px 0}.entry:first-child{border-top:0}.routeBox{background:#f3f6fb;border-radius:10px;padding:10px;margin-top:10px}
+.student-marker{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#fff;border:3px solid #a65f13;font-weight:800;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.student-marker.b1{border-color:#245bd8}.step{border:1px solid var(--line);border-radius:11px;padding:10px;margin-top:8px}.step.active{border-color:var(--blue)}
+.stepTitle{font-weight:750}.poster{border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,#fff,#f3f6fb);padding:15px;min-height:200px;display:flex;flex-direction:column;justify-content:space-between}
+.poster .title{font-size:1.15rem;font-weight:800}.poster .quote{font-size:1rem;line-height:1.45;margin:10px 0}.poster img{width:100%;max-height:180px;object-fit:cover;border-radius:10px;margin:10px 0}.poster .by{font-size:.9rem;color:var(--muted)}
+.recording{border-top:1px solid var(--line);padding:12px 0}.recording:first-child{border-top:0}audio{width:100%;margin-top:8px}.micBox{padding:10px;border-radius:10px;background:#fff6e8;color:#74460f;font-size:.9rem}
+.recordDot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#c62828;margin-right:6px}.online{padding:8px 10px;border-radius:10px;background:#e8f6ef;color:#176b45;font-size:.88rem;margin-top:10px}.offline{background:#fff2df;color:#7a470b}
+@media(max-width:930px){.layout{grid-template-columns:1fr}.two{grid-template-columns:1fr}#mapA,#mapB{height:520px}}
 </style>
 </head>
-
 <body>
-
 <header>
-
 <h1>Flores : notre quartier en français</h1>
-
-<p>
-A1/A2 : commerces et lieux recommandés •
-B1 : circuit papal, appréciations et audios
-</p>
-
-<div id="dbState" class="online">
-Connexion à la base…
-</div>
-
+<p>A1/A2 : commerces et lieux recommandés • B1 : circuit papal, appréciations et audios</p>
+<div id="dbState" class="online">Connexion à la base…</div>
 <div class="tabs">
-
-<button class="tab active" data-target="a12">
-🛍️ A1 / A2
-</button>
-
-<button class="tab" data-target="b1">
-🎙️ B1 – circuit papal
-</button>
-
+<button class="tab active" data-target="a12" type="button">🛍️ A1 / A2</button>
+<button class="tab" data-target="b1" type="button">🎙️ B1 – circuit papal</button>
 </div>
-
 </header>
-
 <main>
-
 <section id="a12" class="panel active">
-
 <div class="layout">
-
 <aside class="stack">
-
 <div class="card">
-
 <h2>A1 / A2 — ajouter un lieu</h2>
-
-<p class="hint">
-Chaque élève choisit un point sur la carte.
-</p>
-
-<div class="toolbar">
-<button id="placeAButton" class="secondary" type="button">
-📍 Placer mon point
-</button>
-</div>
-
-<div id="aPointStatus" class="status">
-Clique sur « Placer mon point », puis sur la carte.
-</div>
-
+<p class="hint">Chaque élève place son point sur la carte. Le travail est enregistré en ligne et réapparaît sur les autres appareils.</p>
 <form id="commerceForm">
-
-<input id="cLat" type="hidden">
-<input id="cLng" type="hidden">
-
-<div class="two">
-
-<div>
-<label>Prénom / groupe</label>
-<input id="cEleve" required>
-</div>
-
-<div>
-<label>Niveau</label>
-<select id="cNiveau">
-<option>A1</option>
-<option>A2</option>
-</select>
-</div>
-
-</div>
-
-<label>Nom du commerce ou du lieu</label>
-<input id="cNom" required>
-
-<label>Catégorie</label>
-
-<select id="cType">
-<option>Boulangerie</option>
-<option>Café</option>
-<option>Restaurant</option>
-<option>Librairie</option>
-<option>Marché</option>
-<option>Vêtements</option>
-<option>Service</option>
-<option>Autre</option>
-</select>
-
-<label>Pourquoi le recommandes-tu ?</label>
-<textarea id="cPourquoi" required></textarea>
-
-<label>Pour y aller…</label>
-<input id="cImperatif">
-
-<button
-class="primary"
-type="submit"
-style="width:100%;margin-top:12px">
-➕ Enregistrer mon point
-</button>
-
+<input id="cLat" type="hidden"><input id="cLng" type="hidden">
+<div class="two"><div><label>Prénom / groupe</label><input id="cEleve" required placeholder="Ex. Sofia"></div><div><label>Niveau</label><select id="cNiveau"><option>A1</option><option>A2</option></select></div></div>
+<label>Nom du commerce ou du lieu</label><input id="cNom" required placeholder="Ex. une boulangerie">
+<label>Catégorie</label><select id="cType"><option>Boulangerie</option><option>Café</option><option>Restaurant</option><option>Librairie</option><option>Marché</option><option>Vêtements</option><option>Service</option><option>Autre</option></select>
+<label>Pourquoi le recommandes-tu ?</label><textarea id="cPourquoi" required placeholder="J'aime ce lieu parce que… / Je le recommande parce que…"></textarea>
+<label>Pour y aller…</label><input id="cImperatif" placeholder="Continuez tout droit. Tournez à gauche…">
+<button class="primary" type="submit" style="width:100%;margin-top:12px">➕ Enregistrer mon point</button>
 </form>
-
 <div id="commerceStatus" class="status"></div>
-
+<div class="routeBox"><strong>Itinéraire A1/A2</strong><div id="commerceRoute" class="small">Chargement…</div></div>
 </div>
-
-<div class="card">
-
-<h3>Points des élèves</h3>
-
-<div id="commerceList">
-Chargement…
-</div>
-
-</div>
-
+<div class="card"><h3>Points des élèves</h3><div id="commerceList" class="small">Chargement…</div></div>
 </aside>
-
-<section>
-<div id="mapA"></div>
-</section>
-
+<section><div id="mapA"></div></section>
 </div>
-
 </section>
-
 
 <section id="b1" class="panel">
-
 <div class="layout">
-
 <aside class="stack">
-
 <div class="card">
-
 <h2>B1 — étapes du circuit papal</h2>
-
+<p class="hint">Les étapes sont enregistrées dans la base et pourront être corrigées ou réordonnées ensuite.</p>
 <div id="papalSteps"></div>
-
-<div class="toolbar">
-
-<button
-id="fitRoute"
-class="secondary"
-type="button">
-🗺️ Voir Flores → Devoto
-</button>
-
+<div class="toolbar"><button id="fitRoute" class="secondary" type="button">🗺️ Voir Flores → Devoto</button></div>
 </div>
-
-</div>
-
-
 <div class="card">
-
 <h2>Créer l'audio d'un élève</h2>
-
-<div class="micBox">
-Choisis un point sur la carte, puis enregistre ou joins un audio.
-Les photos sont automatiquement allégées avant l’envoi.
-</div>
-
+<div class="micBox">Le micro fonctionne indépendamment de la base. Après « Ajouter à la galerie », l'audio et la photo sont envoyés dans le stockage Netlify et restent disponibles sur les autres appareils.</div>
 <form id="audioForm">
-
-<input id="bLat" type="hidden">
-<input id="bLng" type="hidden">
-
-<div class="toolbar">
-
-<button
-id="placeBButton"
-class="secondary"
-type="button">
-📍 Placer mon point
-</button>
-
-</div>
-
-<div id="bPointStatus" class="status">
-Clique sur « Placer mon point », puis sur la carte B1.
-</div>
-
-<div class="two">
-
-<div>
-<label>Prénom</label>
-<input id="bEleve" required>
-</div>
-
-<div>
-<label>Étape</label>
-<select id="bStep"></select>
-</div>
-
-</div>
-
-<label>Titre de la petite affiche</label>
-<input id="bTitre">
-
-<label>Mon appréciation</label>
-<textarea id="bAppreciation" required></textarea>
-
-<label>Photo pour l'affiche (facultatif)</label>
-<input id="bImage" type="file" accept="image/*">
-
+<div class="two"><div><label>Prénom</label><input id="bEleve" required placeholder="Ex. Mateo"></div><div><label>Étape</label><select id="bStep"></select></div></div>
+<label>Titre de la petite affiche</label><input id="bTitre" placeholder="Ex. Un lieu de son enfance">
+<label>Mon appréciation</label><textarea id="bAppreciation" required placeholder="Je trouve ce lieu intéressant parce que…"></textarea>
+<label>Photo pour l'affiche (facultatif)</label><input id="bImage" type="file" accept="image/*">
 <label>Enregistrement</label>
-
-<div class="toolbar">
-
-<button
-id="recordBtn"
-class="good"
-type="button">
-🎙️ Enregistrer
-</button>
-
-<button
-id="stopBtn"
-class="danger"
-type="button"
-disabled>
-⏹ Arrêter
-</button>
-
-</div>
-
+<div class="toolbar"><button id="recordBtn" class="good" type="button">🎙️ Enregistrer</button><button id="stopBtn" class="danger" type="button" disabled>⏹ Arrêter</button></div>
 <div id="recordState" class="status"></div>
-
-<audio
-id="previewAudio"
-controls
-hidden>
-</audio>
-
-<label>Ou joindre un fichier audio</label>
-
-<input
-id="bAudioFile"
-type="file"
-accept="audio/*">
-
-<button
-class="primary"
-type="submit"
-style="width:100%;margin-top:12px">
-💾 Ajouter à la galerie
-</button>
-
+<audio id="previewAudio" controls hidden></audio>
+<label>Ou joindre un fichier audio</label><input id="bAudioFile" type="file" accept="audio/*">
+<button class="primary" type="submit" style="width:100%;margin-top:12px">💾 Ajouter à la galerie</button>
 </form>
-
 <div id="b1Status" class="status"></div>
-
 </div>
-
-
-<div class="card">
-
-<h3>Aperçu de l'affiche</h3>
-
-<div id="posterPreview" class="poster">
-
-<div>
-
-<div class="title">
-Choisissez une étape
-</div>
-
-<div class="quote">
-« Votre appréciation apparaîtra ici. »
-</div>
-
-</div>
-
-<div class="by">
-Témoignage B1
-</div>
-
-</div>
-
-</div>
-
+<div class="card"><h3>Aperçu de l'affiche</h3><div id="posterPreview" class="poster"><div><div class="title">Choisissez une étape</div><div class="quote">« Votre appréciation apparaîtra ici. »</div></div><div class="by">Témoignage B1</div></div></div>
 </aside>
 
-
 <section class="stack">
-
 <div id="mapB"></div>
-
-<div class="card">
-
-<h2>🎧 Galerie B1</h2>
-
-<div id="recordingList"></div>
-
-</div>
-
+<div class="card"><h2>🎧 Galerie B1</h2><div id="recordingList"></div></div>
 </section>
-
 </div>
-
 </section>
-
 </main>
 
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
 (()=>{
-
 const API="/.netlify/functions/api";
-
-const $=id=>
-document.getElementById(id);
-
-const esc=v=>
-String(v??"").replace(
-  /[&<>"']/g,
-  m=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  }[m])
-);
-
-const FLORES=[
-  -34.6297,
-  -58.4631
-];
-
-const DEVOTO=[
-  -34.6007,
-  -58.5135
-];
-
-
-/* ONGLETS */
-
-document
-.querySelectorAll(".tab")
-.forEach(button=>{
-
-  button.onclick=()=>{
-
-    document
-    .querySelectorAll(".tab")
-    .forEach(x=>
-      x.classList.remove("active")
-    );
-
-    document
-    .querySelectorAll(".panel")
-    .forEach(x=>
-      x.classList.remove("active")
-    );
-
-    button.classList.add("active");
-
-    $(button.dataset.target)
-    .classList.add("active");
-
-    setTimeout(
-      ()=>{
-        mapA.invalidateSize();
-        mapB.invalidateSize();
-      },
-      50
-    );
-
-  };
-
-});
-
-
-/* CARTES */
-
-const mapA=
-L.map("mapA")
-.setView(
-  [-34.615,-58.487],
-  13
-);
-
-const mapB=
-L.map("mapB")
-.setView(
-  [-34.615,-58.487],
-  13
-);
-
-[mapA,mapB]
-.forEach(map=>{
-
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      maxZoom:19,
-      attribution:
-      "&copy; OpenStreetMap contributors"
-    }
-  )
-  .addTo(map);
-
-});
-
-
-/* MARQUEURS */
-
-function initials(name){
-
-  return (
-    name||"?"
-  )
-  .trim()
-  .split(/\s+/)
-  .slice(0,2)
-  .map(
-    s=>
-    s[0]?.toUpperCase()||""
-  )
-  .join("")
-  ||"?";
-
-}
-
-function studentIcon(
-  name,
-  level
-){
-
-  return L.divIcon({
-
-    className:"",
-
-    html:
-    `<div class="student-marker ${
-      level==="B1"
-      ?"b1"
-      :""
-    }">${
-      esc(initials(name))
-    }</div>`,
-
-    iconSize:[
-      32,
-      32
-    ],
-
-    iconAnchor:[
-      16,
-      16
-    ]
-
-  });
-
-}
-
-
-/* ÉTAT */
-
-let state={
-  commerces:[],
-  steps:[],
-  b1:[]
-};
-
-let cMarkers=[];
-let bMarkers=[];
-let routeMarkers=[];
-
-let routeLine=null;
-
-let cPending=null;
-let bPending=null;
-
-let placingA=false;
-let placingB=false;
-
-let mediaRecorder=null;
-let chunks=[];
-let recordedBlob=null;
-let mediaStream=null;
-
-let previewImageUrl="";
-
-
-/* API */
-
-function apiUrl(
-  action,
-  params={}
-){
-
-  const url=
-  new URL(
-    API,
-    location.origin
-  );
-
-  url.searchParams.set(
-    "action",
-    action
-  );
-
-  Object
-  .entries(params)
-  .forEach(
-    ([key,value])=>{
-
-      if(
-        value!==null
-        &&
-        value!==undefined
-      ){
-
-        url.searchParams.set(
-          key,
-          value
-        );
-
-      }
-
-    }
-  );
-
-  return (
-    url.pathname
-    +
-    url.search
-  );
-
-}
-
-
-async function api(
-  action,
-  options={},
-  params={}
-){
-
-  const response=
-  await fetch(
-    apiUrl(
-      action,
-      params
-    ),
-    options
-  );
-
-  const text=
-  await response.text();
-
-  let data={};
-
-  try{
-    data=JSON.parse(text);
-  }
-  catch{}
-
-  if(
-    !response.ok
-  ){
-
-    throw new Error(
-      data.error
-      ||
-      text
-      ||
-      `Erreur HTTP ${response.status}`
-    );
-
-  }
-
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const FLORES=[-34.6297,-58.4631], DEVOTO=[-34.6007,-58.5135];
+
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.target).classList.add("active");setTimeout(()=>{mapA.invalidateSize();mapB.invalidateSize()},60)}));
+
+const mapA=L.map("mapA").setView([-34.615,-58.487],13);
+const mapB=L.map("mapB").setView([-34.615,-58.487],13);
+[mapA,mapB].forEach(m=>L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"&copy; OpenStreetMap contributors"}).addTo(m));
+
+function initials(name){return (name||"?").trim().split(/\s+/).slice(0,2).map(s=>s[0]?.toUpperCase()||"").join("")||"?"}
+function studentIcon(name,level){return L.divIcon({className:"",html:`<div class="student-marker ${level==="B1"?"b1":""}">${esc(initials(name))}</div>`,iconSize:[32,32],iconAnchor:[16,16]})}
+
+let state={commerces:[],steps:[],b1:[]};
+let cMarkers=[],cLine=null,cPending=null,bMarkers=[],routeMarkers=[],routeLine=null;
+
+async function api(action,options={}){
+  const url=`${API}?action=${encodeURIComponent(action)}`;
+  const r=await fetch(url,options);
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(data.error||`Erreur HTTP ${r.status}`);
   return data;
-
 }
-
-
-/* ACTUALISER */
-
-async function refresh(){
-
-  const data=
-  await api("state");
-
-  state=data;
-
-  renderCommerces();
-  renderSteps();
-  renderB1();
-
-}
-
 
 async function loadAll(){
-
   try{
-
-    await refresh();
-
-    $("dbState").textContent=
-    "✓ Base Netlify connectée — données partagées entre appareils";
-
-    $("dbState").className=
-    "online";
-
+    const data=await api("state");
+    state=data;
+    $("dbState").textContent="✓ Base Netlify connectée — données partagées entre appareils";
+    $("dbState").className="online";
+    renderCommerces(); renderSteps(); renderB1();
+  }catch(e){
+    $("dbState").textContent="⚠ Connexion à la base impossible : "+e.message;
+    $("dbState").className="online offline";
+    $("commerceList").textContent="Impossible de charger les données.";
+    $("recordingList").textContent="Impossible de charger les données.";
   }
-  catch(error){
-
-    $("dbState").textContent=
-    "⚠ Connexion à la base impossible : "
-    +
-    error.message;
-
-    $("dbState").className=
-    "online offline";
-
-  }
-
 }
 
-
-/* ============================= */
-/* A1 / A2 */
-/* ============================= */
-
+// A1/A2
 function renderCommerces(){
-
-  cMarkers
-  .forEach(
-    marker=>
-    mapA.removeLayer(marker)
-  );
-
-  cMarkers=[];
-
+  cMarkers.forEach(m=>mapA.removeLayer(m));cMarkers=[];
+  if(cLine){mapA.removeLayer(cLine);cLine=null}
   $("commerceList").innerHTML="";
-
-
-  state.commerces
-  .forEach(place=>{
-
-    const lat=
-    Number(place.latitude);
-
-    const lng=
-    Number(place.longitude);
-
-    if(
-      !Number.isFinite(lat)
-      ||
-      !Number.isFinite(lng)
-    ){
-      return;
-    }
-
-
-    const marker=
-    L.marker(
-      [lat,lng],
-      {
-        icon:
-        studentIcon(
-          place.student_name,
-          place.level
-        )
-      }
-    )
-    .addTo(mapA)
-    .bindPopup(
-      `<strong>${
-        esc(place.student_name)
-      } — ${
-        esc(place.level)
-      }</strong><br>${
-        esc(place.place_name)
-      }<br>${
-        esc(place.recommendation)
-      }`
-    );
-
-    cMarkers.push(marker);
-
-
-    const card=
-    document.createElement("div");
-
-    card.className=
-    "entry";
-
-
-    card.innerHTML=
-
-    `<strong>${
-      esc(place.student_name)
-    } — ${
-      esc(place.place_name)
-    }</strong>`
-
-    +
-
-    `<div>
-      <span class="badge">${
-        esc(place.level)
-      }</span>
-
-      <span class="badge">${
-        esc(place.category||"")
-      }</span>
-    </div>`
-
-    +
-
-    `<div>${
-      esc(place.recommendation||"")
-    }</div>`;
-
-
-    const deleteButton=
-    document.createElement("button");
-
-    deleteButton.type=
-    "button";
-
-    deleteButton.className=
-    "danger";
-
-    deleteButton.textContent=
-    "🗑 Supprimer ce point";
-
-
-    deleteButton.onclick=
-    async()=>{
-
-      if(
-        !confirm(
-          `Supprimer le point de ${place.student_name} ?`
-        )
-      ){
-        return;
-      }
-
-      try{
-
-        await api(
-          "commerce-delete",
-          {
-            method:"DELETE"
-          },
-          {
-            id:place.id
-          }
-        );
-
-        await refresh();
-
-      }
-      catch(error){
-
-        alert(
-          error.message
-        );
-
-      }
-
-    };
-
-
-    card.appendChild(
-      deleteButton
-    );
-
-
-    $("commerceList")
-    .appendChild(
-      card
-    );
-
+  const coords=[];
+  state.commerces.forEach((p,i)=>{
+    const m=L.marker([Number(p.latitude),Number(p.longitude)],{icon:studentIcon(p.student_name,p.level)}).addTo(mapA)
+      .bindPopup(`<strong>${esc(p.student_name)} — ${esc(p.level)}</strong><br>${esc(p.place_name)}<br>${esc(p.recommendation)}`);
+    cMarkers.push(m);coords.push([Number(p.latitude),Number(p.longitude)]);
+    const d=document.createElement("div");d.className="entry";
+    d.innerHTML=`<strong>${i+1}. ${esc(p.student_name)} — ${esc(p.place_name)}</strong><div><span class="badge">${esc(p.level)}</span><span class="badge">${esc(p.category)}</span></div><div>${esc(p.recommendation)}</div>${p.directions?`<div class="small">➡ ${esc(p.directions)}</div>`:""}`;
+    $("commerceList").appendChild(d);
   });
-
-
-  if(
-    !state.commerces.length
-  ){
-
-    $("commerceList").textContent=
-    "Aucun point pour le moment.";
-
-  }
-
+  if(!state.commerces.length)$("commerceList").textContent="Aucun point pour le moment.";
+  if(coords.length>1)cLine=L.polyline(coords,{weight:4,color:"#a65f13",opacity:.7}).addTo(mapA);
+  $("commerceRoute").textContent=state.commerces.length?state.commerces.map((p,i)=>`${i+1}. ${p.student_name}: ${p.place_name}`).join(" → "):"Aucun point ajouté.";
 }
 
+mapA.on("click",e=>{$("cLat").value=e.latlng.lat.toFixed(6);$("cLng").value=e.latlng.lng.toFixed(6);if(cPending)mapA.removeLayer(cPending);cPending=L.circleMarker(e.latlng,{radius:7,color:"#a65f13",fillOpacity:.25}).addTo(mapA);$("commerceStatus").textContent="✓ Point choisi."});
 
-$("placeAButton").
+$("commerceForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const lat=Number($("cLat").value),lng=Number($("cLng").value);
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)){ $("commerceStatus").textContent="Clique d'abord sur la carte.";return}
+  $("commerceStatus").textContent="Enregistrement…";
+  try{
+    await api("commerce",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      student_name:$("cEleve").value.trim(),level:$("cNiveau").value,place_name:$("cNom").value.trim(),category:$("cType").value,
+      recommendation:$("cPourquoi").value.trim(),directions:$("cImperatif").value.trim(),latitude:lat,longitude:lng
+    })});
+    if(cPending){mapA.removeLayer(cPending);cPending=null}
+    $("cLat").value="";$("cLng").value="";
+    $("commerceStatus").textContent="✓ Enregistré dans la base.";
+    const data=await api("state");state=data;renderCommerces();
+  }catch(err){$("commerceStatus").textContent="Erreur : "+err.message}
+});
+
+// B1 route
+function renderSteps(){
+  routeMarkers.forEach(m=>mapB.removeLayer(m));routeMarkers=[];
+  if(routeLine){mapB.removeLayer(routeLine);routeLine=null}
+  $("papalSteps").innerHTML="";$("bStep").innerHTML="";
+  const coords=[];
+  state.steps.forEach((s,i)=>{
+    const o=document.createElement("option");o.value=s.id;o.textContent=`${i+1}. ${s.name}`;$("bStep").appendChild(o);
+    const d=document.createElement("div");d.className="step";d.dataset.id=s.id;
+    d.innerHTML=`<div class="stepTitle">${i+1}. ${esc(s.name)}</div><div class="small">${esc(s.address||"Adresse à compléter")}</div>`;
+    d.addEventListener("click",()=>{$("bStep").value=s.id;selectStep(s.id)});
+    $("papalSteps").appendChild(d);
+    if(s.latitude!==null&&s.longitude!==null){
+      const lat=Number(s.latitude),lng=Number(s.longitude);
+      const m=L.marker([lat,lng]).addTo(mapB).bindPopup(`<strong>${i+1}. ${esc(s.name)}</strong><br>${esc(s.address||"")}`);
+      routeMarkers.push(m);coords.push([lat,lng]);
+    }
+  });
+  if(coords.length>1)routeLine=L.polyline(coords,{weight:4,color:"#245bd8",opacity:.7,dashArray:"6,6"}).addTo(mapB);
+  if(state.steps.length)selectStep(state.steps[0].id);
+}
+
+function selectStep(id){
+  document.querySelectorAll(".step").forEach(x=>x.classList.toggle("active",x.dataset.id===id));
+  const s=state.steps.find(x=>x.id===id);
+  if(s&&s.latitude!==null&&s.longitude!==null)mapB.setView([Number(s.latitude),Number(s.longitude)],16);
+  updatePoster();
+}
+
+$("bStep").addEventListener("change",()=>selectStep($("bStep").value));
+$("fitRoute").addEventListener("click",()=>mapB.fitBounds([FLORES,DEVOTO],{padding:[25,25]}));
+
+// Audio
+let mediaRecorder=null,chunks=[],recordedBlob=null,stream=null,previewImageUrl="";
+
+function supportedMime(){if(!window.MediaRecorder)return"";const types=["audio/webm;codecs=opus","audio/webm","audio/mp4","audio/ogg;codecs=opus"];return types.find(t=>MediaRecorder.isTypeSupported?.(t))||""}
+
+$("recordBtn").addEventListener("click",async()=>{
+  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){$("recordState").textContent="Ce navigateur ne permet pas l'enregistrement direct. Utilisez le fichier audio.";return}
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    chunks=[];const mime=supportedMime();
+    mediaRecorder=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream);
+    mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+    mediaRecorder.onstop=()=>{
+      recordedBlob=new Blob(chunks,{type:mediaRecorder.mimeType||mime||"audio/webm"});
+      $("previewAudio").src=URL.createObjectURL(recordedBlob);$("previewAudio").hidden=false;
+      $("recordState").textContent="✓ Audio enregistré.";
+      stream?.getTracks().forEach(t=>t.stop());stream=null;
+    };
+    mediaRecorder.start(250);$("recordBtn").disabled=true;$("stopBtn").disabled=false;
+    $("recordState").innerHTML='<span class="recordDot"></span>Enregistrement en cours…';
+  }catch(err){
+    console.error("Erreur microphone complète:",err);
+    $("recordState").textContent=`Micro : ${err.name||"Erreur"} — ${err.message||"indisponible"}`;
+  }
+});
+
+$("stopBtn").addEventListener("click",()=>{if(mediaRecorder&&mediaRecorder.state!=="inactive")mediaRecorder.stop();$("recordBtn").disabled=false;$("stopBtn").disabled=true});
+
+function updatePoster(){
+  const s=state.steps.find(x=>x.id===$("bStep").value)||state.steps[0];
+  const title=$("bTitre").value.trim()||(s?s.name:"Choisissez une étape");
+  const txt=$("bAppreciation").value.trim()||"Votre appréciation apparaîtra ici.";
+  const eleve=$("bEleve").value.trim()||"Témoignage B1";
+  $("posterPreview").innerHTML=`<div><div class="title">${esc(title)}</div>${previewImageUrl?`<img src="${previewImageUrl}" alt="">`:""}<div class="quote">« ${esc(txt)} »</div></div><div class="by">${esc(eleve)}${s?` • ${esc(s.name)}`:""}</div>`;
+}
+
+["bTitre","bAppreciation","bEleve"].forEach(id=>$(id).addEventListener("input",updatePoster));
+
+$("bImage").addEventListener("change",()=>{if(previewImageUrl)URL.revokeObjectURL(previewImageUrl);const f=$("bImage").files[0];previewImageUrl=f?URL.createObjectURL(f):"";updatePoster()});
+
+$("audioForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const audio=recordedBlob||$("bAudioFile").files[0];
+  if(!audio){$("b1Status").textContent="Enregistre ou joins d'abord un audio.";return}
+  $("b1Status").textContent="Envoi de l'audio et enregistrement…";
+  const fd=new FormData();
+  fd.append("student_name",$("bEleve").value.trim());
+  fd.append("step_id",$("bStep").value);
+  fd.append("title",$("bTitre").value.trim());
+  fd.append("appreciation",$("bAppreciation").value.trim());
+  fd.append("audio",audio,"audio."+((audio.type||"").includes("mp4")?"m4a":(audio.type||"").includes("ogg")?"ogg":"webm"));
+  const img=$("bImage").files[0];if(img)fd.append("image",img,img.name||"image.jpg");
+  try{
+    await api("b1",{method:"POST",body:fd});
+    recordedBlob=null;$("previewAudio").hidden=true;$("previewAudio").removeAttribute("src");$("bAudioFile").value="";
+    $("b1Status").textContent="✓ Témoignage enregistré en ligne.";
+    const data=await api("state");state=data;renderB1();
+  }catch(err){$("b1Status").textContent="Erreur : "+err.message}
+});
+
+function renderB1(){
+  bMarkers.forEach(m=>mapB.removeLayer(m));bMarkers=[];
+  $("recordingList").innerHTML="";
+  state.b1.forEach(r=>{
+    const s=state.steps.find(x=>x.id===r.step_id);
+    if(s&&s.latitude!==null&&s.longitude!==null){
+      const m=L.marker([Number(s.latitude),Number(s.longitude)],{icon:studentIcon(r.student_name,"B1")}).addTo(mapB)
+        .bindPopup(`<strong>${esc(r.student_name)} — B1</strong><br>${esc(s.name)}<br>${esc(r.appreciation)}`);
+      bMarkers.push(m);
+    }
+    const d=document.createElement("div");d.className="recording";
+    const audioUrl=r.audio_key?`${API}?action=media&key=${encodeURIComponent(r.audio_key)}`:"";
+    const imageUrl=r.image_key?`${API}?action=media&key=${encodeURIComponent(r.image_key)}`:"";
+    d.innerHTML=`<div class="poster"><div><div class="title">${esc(r.title||s?.name||"Témoignage")}</div>${imageUrl?`<img src="${imageUrl}" alt="">`:""}<div class="quote">« ${esc(r.appreciation)} »</div></div><div class="by">${esc(r.student_name)} • ${esc(s?.name||"circuit papal")}</div></div>${audioUrl?`<audio controls preload="metadata" src="${audioUrl}"></audio>`:""}`;
+    $("recordingList").appendChild(d);
+  });
+  if(!state.b1.length)$("recordingList").innerHTML='<p class="small">Aucun témoignage pour le moment.</p>';
+}
+
+loadAll();
+})();
+</script>
+</body>
+</html>
