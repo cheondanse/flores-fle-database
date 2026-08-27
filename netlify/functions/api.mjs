@@ -5,86 +5,16 @@ const db = getDatabase();
 const mediaStore = getStore("flores-fle-media");
 
 const seedSteps = [
-  [
-    "bas",
-    "Basílica San José de Flores",
-    "Av. Rivadavia 6950, Flores, Buenos Aires",
-    -34.6297,
-    -58.4631,
-    1
-  ],
-  [
-    "solar",
-    "Solar de la Infancia",
-    "Membrillar 531, Flores, Buenos Aires",
-    null,
-    null,
-    2
-  ],
-  [
-    "miser",
-    "Instituto Nuestra Señora de la Misericordia",
-    "Av. Directorio 2138, Flores, Buenos Aires",
-    null,
-    null,
-    3
-  ],
-  [
-    "plaz",
-    "Plazoleta Herminia Brumana",
-    "Membrillar y Francisco Bilbao, Flores, Buenos Aires",
-    null,
-    null,
-    4
-  ],
-  [
-    "esc",
-    "Escuela Nº 8 D.E. 11 « Cnel. Ing. Pedro Antonio Cerviño »",
-    "Varela 358, Flores, Buenos Aires",
-    null,
-    null,
-    5
-  ],
-  [
-    "vic",
-    "Vicaría de San José de Flores",
-    "Condarco 545, Flores, Buenos Aires",
-    null,
-    null,
-    6
-  ],
-  [
-    "enet",
-    "E.N.E.T. Nº 27 « Hipólito Yrigoyen »",
-    "Virgilio 1980, Monte Castro, Buenos Aires",
-    null,
-    null,
-    7
-  ],
-  [
-    "carcel",
-    "Servicio Penitenciario – Cárcel de Devoto",
-    "Bahía Blanca 363, Villa Devoto, Buenos Aires",
-    null,
-    null,
-    8
-  ],
-  [
-    "semi",
-    "Seminario Metropolitano de Buenos Aires",
-    "José Cubas 3543, Villa Devoto, Buenos Aires",
-    null,
-    null,
-    9
-  ],
-  [
-    "talar",
-    "Parroquia San José del Talar – Virgen Desatanudos",
-    "Navarro 2460, Agronomía, Buenos Aires",
-    null,
-    null,
-    10
-  ]
+  ["bas", "Basílica San José de Flores", "Av. Rivadavia 6950, Flores, Buenos Aires", -34.6297, -58.4631, 1],
+  ["solar", "Solar de la Infancia", "Membrillar 531, Flores, Buenos Aires", null, null, 2],
+  ["miser", "Instituto Nuestra Señora de la Misericordia", "Av. Directorio 2138, Flores, Buenos Aires", null, null, 3],
+  ["plaz", "Plazoleta Herminia Brumana", "Membrillar y Francisco Bilbao, Flores, Buenos Aires", null, null, 4],
+  ["esc", "Escuela Nº 8 D.E. 11 « Cnel. Ing. Pedro Antonio Cerviño »", "Varela 358, Flores, Buenos Aires", null, null, 5],
+  ["vic", "Vicaría de San José de Flores", "Condarco 545, Flores, Buenos Aires", null, null, 6],
+  ["enet", "E.N.E.T. Nº 27 « Hipólito Yrigoyen »", "Virgilio 1980, Monte Castro, Buenos Aires", null, null, 7],
+  ["carcel", "Servicio Penitenciario – Cárcel de Devoto", "Bahía Blanca 363, Villa Devoto, Buenos Aires", null, null, 8],
+  ["semi", "Seminario Metropolitano de Buenos Aires", "José Cubas 3543, Villa Devoto, Buenos Aires", null, null, 9],
+  ["talar", "Parroquia San José del Talar – Virgen Desatanudos", "Navarro 2460, Agronomía, Buenos Aires", null, null, 10]
 ];
 
 async function ensureSchema() {
@@ -142,14 +72,7 @@ async function ensureSchema() {
     for (const s of seedSteps) {
       await db.sql`
         INSERT INTO fle_papal_steps
-        (
-          id,
-          name,
-          address,
-          latitude,
-          longitude,
-          route_order
-        )
+        (id, name, address, latitude, longitude, route_order)
         VALUES (
           ${s[0]},
           ${s[1]},
@@ -170,10 +93,6 @@ function json(data, status = 200) {
       "Cache-Control": "no-store"
     }
   });
-}
-
-function uuid() {
-  return crypto.randomUUID();
 }
 
 export default async (req) => {
@@ -226,12 +145,7 @@ export default async (req) => {
         !Number.isFinite(lat) ||
         !Number.isFinite(lng)
       ) {
-        return json(
-          {
-            error: "Données A1/A2 incomplètes."
-          },
-          400
-        );
+        return json({ error: "Données A1/A2 incomplètes." }, 400);
       }
 
       const count = await db.sql`
@@ -239,7 +153,7 @@ export default async (req) => {
         FROM fle_student_places
       `;
 
-      const id = uuid();
+      const id = crypto.randomUUID();
 
       await db.sql`
         INSERT INTO fle_student_places
@@ -269,13 +183,7 @@ export default async (req) => {
         )
       `;
 
-      return json(
-        {
-          ok: true,
-          id
-        },
-        201
-      );
+      return json({ ok: true, id }, 201);
     }
 
     if (action === "b1" && req.method === "POST") {
@@ -296,20 +204,18 @@ export default async (req) => {
         !(audio instanceof File) ||
         audio.size === 0
       ) {
-        return json(
-          {
-            error: "Témoignage B1 incomplet ou audio manquant."
-          },
-          400
-        );
+        return json({
+          error: "Témoignage B1 incomplet ou audio manquant."
+        }, 400);
       }
 
-      const id = uuid();
+      const id = crypto.randomUUID();
 
       const safeAudioType =
         audio.type || "application/octet-stream";
 
-      const audioKey = `b1/${id}/audio`;
+      const audioKey =
+        `b1/${id}/audio`;
 
       await mediaStore.set(
         audioKey,
@@ -326,11 +232,15 @@ export default async (req) => {
       let imageKey = null;
       let imageType = null;
 
-      if (image instanceof File && image.size > 0) {
+      if (
+        image instanceof File &&
+        image.size > 0
+      ) {
         imageType =
           image.type || "application/octet-stream";
 
-        imageKey = `b1/${id}/image`;
+        imageKey =
+          `b1/${id}/image`;
 
         await mediaStore.set(
           imageKey,
@@ -371,110 +281,66 @@ export default async (req) => {
         )
       `;
 
-      return json(
-        {
-          ok: true,
-          id
-        },
-        201
-      );
+      return json({
+        ok: true,
+        id
+      }, 201);
     }
 
-    if (action === "media" && req.method === "GET") {
-      const key = url.searchParams.get("key");
+    if (
+      action === "media" &&
+      req.method === "GET"
+    ) {
+      const key =
+        url.searchParams.get("key");
 
-      if (!key || !key.startsWith("b1/")) {
+      if (
+        !key ||
+        !key.startsWith("b1/")
+      ) {
         return new Response("Invalid key", {
           status: 400
         });
       }
 
-      const entry = await mediaStore.getWithMetadata(
-        key,
-        {
-          type: "arrayBuffer",
-          consistency: "strong"
-        }
-      );
+      const entry =
+        await mediaStore.getWithMetadata(
+          key,
+          {
+            type: "arrayBuffer",
+            consistency: "strong"
+          }
+        );
 
-      if (!entry || entry.data === null) {
+      if (
+        !entry ||
+        entry.data === null
+      ) {
         return new Response("Not found", {
           status: 404
         });
       }
-
-      const contentType =
-        entry.metadata?.contentType ||
-        "application/octet-stream";
 
       return new Response(
         entry.data,
         {
           status: 200,
           headers: {
-            "Content-Type": contentType,
-            "Cache-Control": "private, max-age=3600",
-            "Content-Length": String(
-              entry.data.byteLength
-            )
+            "Content-Type":
+              entry.metadata?.contentType ||
+              "application/octet-stream",
+            "Cache-Control":
+              "private, max-age=3600",
+            "Content-Length":
+              String(entry.data.byteLength)
           }
         }
       );
     }
 
-    if (action === "step" && req.method === "PATCH") {
-      const body = await req.json();
-
-      const id = String(body.id || "");
-
-      if (!id) {
-        return json(
-          {
-            error: "Étape manquante."
-          },
-          400
-        );
-      }
-
-      const latitude =
-        body.latitude === null ||
-        body.latitude === ""
-          ? null
-          : Number(body.latitude);
-
-      const longitude =
-        body.longitude === null ||
-        body.longitude === ""
-          ? null
-          : Number(body.longitude);
-
-      const routeOrder =
-        Number.isFinite(Number(body.route_order))
-          ? Number(body.route_order)
-          : 0;
-
-      await db.sql`
-        UPDATE fle_papal_steps
-        SET
-          name = ${String(body.name || "")},
-          address = ${String(body.address || "")},
-          latitude = ${latitude},
-          longitude = ${longitude},
-          route_order = ${routeOrder}
-        WHERE id = ${id}
-      `;
-
-      return json({
-        ok: true
-      });
-    }
-
-    return json(
-      {
-        error: "Action inconnue."
-      },
-      404
-    );
+    return json({
+      error: "Action inconnue."
+    }, 404);
 
   } catch (error) {
     console.error(
@@ -482,13 +348,10 @@ export default async (req) => {
       error
     );
 
-    return json(
-      {
-        error:
-          error?.message ||
-          "Erreur serveur."
-      },
-      500
-    );
+    return json({
+      error:
+        error?.message ||
+        "Erreur serveur."
+    }, 500);
   }
 };
