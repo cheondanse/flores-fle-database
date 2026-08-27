@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
 <title>Flores – A1/A2 commerces & circuit papal B1</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -11,7 +10,7 @@
 <style>
 :root{
   --bg:#f6f7f9;
-  --card:#ffffff;
+  --card:#fff;
   --ink:#17202a;
   --muted:#667085;
   --line:#d8dee8;
@@ -19,135 +18,111 @@
   --orange:#a65f13;
   --green:#18724a;
   --red:#a8322b;
-  --soft:#eef2f7;
+  --soft:#eef2f7
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   background:var(--bg);
-  color:var(--ink);
+  color:var(--ink)
 }
 
 header{
   background:#fff;
   border-bottom:1px solid var(--line);
-  padding:16px;
+  padding:16px
 }
 
-header h1{
+h1{
   margin:0 0 5px;
-  font-size:clamp(1.35rem,4vw,2rem);
+  font-size:clamp(1.35rem,4vw,2rem)
 }
 
 header p{
   margin:0;
-  color:var(--muted);
+  color:var(--muted)
 }
 
-.tabs{
+.tabs,.toolbar{
   display:flex;
   gap:8px;
   flex-wrap:wrap;
-  margin-top:12px;
+  margin-top:10px
 }
 
 .tab{
   border:1px solid var(--line);
   background:#fff;
   border-radius:999px;
-  padding:10px 14px;
-  cursor:pointer;
+  padding:10px 14px
 }
 
 .tab.active{
   background:var(--blue);
   color:#fff;
-  border-color:var(--blue);
+  border-color:var(--blue)
 }
 
 main{
   max-width:1300px;
   margin:auto;
-  padding:14px;
+  padding:14px
 }
 
-.panel{
-  display:none;
-}
-
-.panel.active{
-  display:block;
-}
+.panel{display:none}
+.panel.active{display:block}
 
 .layout{
   display:grid;
   grid-template-columns:400px minmax(0,1fr);
-  gap:14px;
+  gap:14px
 }
 
 .stack{
   display:grid;
-  gap:14px;
+  gap:14px
 }
 
 .card{
   background:var(--card);
   border:1px solid var(--line);
   border-radius:14px;
-  padding:14px;
+  padding:14px
 }
 
-h2,h3{
-  margin:0 0 8px;
-}
+h2,h3{margin:0 0 8px}
 
-h2{
-  font-size:1.12rem;
-}
-
-h3{
-  font-size:1rem;
-}
-
-.small,
-.hint{
+.hint,.small{
   font-size:.9rem;
   color:var(--muted);
-  line-height:1.45;
+  line-height:1.45
 }
 
 label{
   display:block;
   font-weight:650;
-  margin-top:9px;
+  margin-top:9px
 }
 
-input,
-select,
-textarea,
-button{
-  font:inherit;
+input,select,textarea,button{
+  font:inherit
 }
 
-input,
-select,
-textarea{
+input,select,textarea{
   width:100%;
   padding:10px;
   border:1px solid var(--line);
   border-radius:10px;
   background:#fff;
-  font-size:16px;
+  font-size:16px
 }
 
 textarea{
   min-height:78px;
-  resize:vertical;
+  resize:vertical
 }
 
 button{
@@ -155,59 +130,61 @@ button{
   border-radius:10px;
   padding:10px 12px;
   cursor:pointer;
-  min-height:44px;
+  min-height:44px
 }
 
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
+button:disabled{opacity:.5}
 
 .primary{
   background:var(--blue);
-  color:#fff;
+  color:#fff
 }
 
 .secondary{
-  background:var(--soft);
-  color:var(--ink);
+  background:var(--soft)
 }
 
 .good{
   background:#e8f6ef;
-  color:var(--green);
+  color:var(--green)
 }
 
 .danger{
   background:#ffe9e7;
-  color:var(--red);
-}
-
-.toolbar{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px;
+  color:var(--red)
 }
 
 .two{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:8px;
+  gap:8px
 }
 
 .status{
   min-height:1.25em;
   color:var(--green);
   font-size:.9rem;
-  margin-top:8px;
+  margin-top:8px
 }
 
-#mapA,
-#mapB{
+.online{
+  padding:8px 10px;
+  border-radius:10px;
+  background:#e8f6ef;
+  color:#176b45;
+  font-size:.88rem;
+  margin-top:10px
+}
+
+.offline{
+  background:#fff2df;
+  color:#7a470b
+}
+
+#mapA,#mapB{
   height:700px;
   border:1px solid var(--line);
-  border-radius:14px;
+  border-radius:14px
 }
 
 .badge{
@@ -216,16 +193,12 @@ button:disabled{
   border-radius:999px;
   background:var(--soft);
   font-size:.78rem;
-  margin:2px 4px 2px 0;
+  margin:2px 4px 2px 0
 }
 
-.entry{
+.entry,.recording{
   border-top:1px solid var(--line);
-  padding:10px 0;
-}
-
-.entry:first-child{
-  border-top:0;
+  padding:10px 0
 }
 
 .student-marker{
@@ -239,11 +212,11 @@ button:disabled{
   border:3px solid var(--orange);
   font-weight:800;
   font-size:11px;
-  box-shadow:0 1px 4px rgba(0,0,0,.25);
+  box-shadow:0 1px 4px #0004
 }
 
 .student-marker.b1{
-  border-color:var(--blue);
+  border-color:var(--blue)
 }
 
 .step{
@@ -251,15 +224,15 @@ button:disabled{
   border-radius:11px;
   padding:10px;
   margin-top:8px;
-  cursor:pointer;
+  cursor:pointer
 }
 
 .step.active{
-  border-color:var(--blue);
+  border-color:var(--blue)
 }
 
 .stepTitle{
-  font-weight:750;
+  font-weight:750
 }
 
 .poster{
@@ -270,18 +243,18 @@ button:disabled{
   min-height:200px;
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  justify-content:space-between
 }
 
 .poster .title{
   font-size:1.15rem;
-  font-weight:800;
+  font-weight:800
 }
 
 .poster .quote{
   font-size:1rem;
   line-height:1.45;
-  margin:10px 0;
+  margin:10px 0
 }
 
 .poster img{
@@ -289,26 +262,17 @@ button:disabled{
   max-height:180px;
   object-fit:cover;
   border-radius:10px;
-  margin:10px 0;
+  margin:10px 0
 }
 
 .poster .by{
   font-size:.9rem;
-  color:var(--muted);
-}
-
-.recording{
-  border-top:1px solid var(--line);
-  padding:12px 0;
-}
-
-.recording:first-child{
-  border-top:0;
+  color:var(--muted)
 }
 
 audio{
   width:100%;
-  margin-top:8px;
+  margin-top:8px
 }
 
 .micBox{
@@ -316,7 +280,7 @@ audio{
   border-radius:10px;
   background:#fff6e8;
   color:#74460f;
-  font-size:.9rem;
+  font-size:.9rem
 }
 
 .recordDot{
@@ -325,36 +289,13 @@ audio{
   height:10px;
   border-radius:50%;
   background:#c62828;
-  margin-right:6px;
-}
-
-.online{
-  padding:8px 10px;
-  border-radius:10px;
-  background:#e8f6ef;
-  color:#176b45;
-  font-size:.88rem;
-  margin-top:10px;
-}
-
-.offline{
-  background:#fff2df;
-  color:#7a470b;
+  margin-right:6px
 }
 
 @media(max-width:930px){
-  .layout{
-    grid-template-columns:1fr;
-  }
-
-  .two{
-    grid-template-columns:1fr;
-  }
-
-  #mapA,
-  #mapB{
-    height:520px;
-  }
+  .layout{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
+  #mapA,#mapB{height:520px}
 }
 </style>
 </head>
@@ -376,17 +317,11 @@ Connexion à la base…
 
 <div class="tabs">
 
-<button
-class="tab active"
-data-target="a12"
-type="button">
+<button class="tab active" data-target="a12">
 🛍️ A1 / A2
 </button>
 
-<button
-class="tab"
-data-target="b1"
-type="button">
+<button class="tab" data-target="b1">
 🎙️ B1 – circuit papal
 </button>
 
@@ -396,13 +331,7 @@ type="button">
 
 <main>
 
-<!-- ===================================================== -->
-<!-- A1 / A2 -->
-<!-- ===================================================== -->
-
-<section
-id="a12"
-class="panel active">
+<section id="a12" class="panel active">
 
 <div class="layout">
 
@@ -413,82 +342,47 @@ class="panel active">
 <h2>A1 / A2 — ajouter un lieu</h2>
 
 <p class="hint">
-Chaque élève choisit un seul point sur la carte.
-Si l'élève enregistre un nouveau point, l'ancien est remplacé.
+Chaque élève choisit un point sur la carte.
 </p>
 
 <div class="toolbar">
-
-<button
-id="placeAButton"
-class="secondary"
-type="button">
+<button id="placeAButton" class="secondary" type="button">
 📍 Placer mon point
 </button>
-
 </div>
 
-<div
-id="aPointStatus"
-class="status">
-Clique sur « Placer mon point », puis clique sur la carte.
+<div id="aPointStatus" class="status">
+Clique sur « Placer mon point », puis sur la carte.
 </div>
 
 <form id="commerceForm">
 
-<input
-id="cLat"
-type="hidden">
-
-<input
-id="cLng"
-type="hidden">
+<input id="cLat" type="hidden">
+<input id="cLng" type="hidden">
 
 <div class="two">
 
 <div>
-
-<label for="cEleve">
-Prénom / groupe
-</label>
-
-<input
-id="cEleve"
-required
-placeholder="Ex. Sofia">
-
+<label>Prénom / groupe</label>
+<input id="cEleve" required>
 </div>
 
 <div>
-
-<label for="cNiveau">
-Niveau
-</label>
-
+<label>Niveau</label>
 <select id="cNiveau">
 <option>A1</option>
 <option>A2</option>
 </select>
-
 </div>
 
 </div>
 
-<label for="cNom">
-Nom du commerce ou du lieu
-</label>
+<label>Nom du commerce ou du lieu</label>
+<input id="cNom" required>
 
-<input
-id="cNom"
-required
-placeholder="Ex. une boulangerie">
-
-<label for="cType">
-Catégorie
-</label>
+<label>Catégorie</label>
 
 <select id="cType">
-
 <option>Boulangerie</option>
 <option>Café</option>
 <option>Restaurant</option>
@@ -497,53 +391,32 @@ Catégorie
 <option>Vêtements</option>
 <option>Service</option>
 <option>Autre</option>
-
 </select>
 
-<label for="cPourquoi">
-Pourquoi le recommandes-tu ?
-</label>
+<label>Pourquoi le recommandes-tu ?</label>
+<textarea id="cPourquoi" required></textarea>
 
-<textarea
-id="cPourquoi"
-required
-placeholder="Je le recommande parce que…">
-</textarea>
-
-<label for="cImperatif">
-Pour y aller…
-</label>
-
-<input
-id="cImperatif"
-placeholder="Continuez tout droit. Tournez à gauche…">
+<label>Pour y aller…</label>
+<input id="cImperatif">
 
 <button
 class="primary"
 type="submit"
 style="width:100%;margin-top:12px">
-
 ➕ Enregistrer mon point
-
 </button>
 
 </form>
 
-<div
-id="commerceStatus"
-class="status">
-</div>
+<div id="commerceStatus" class="status"></div>
 
 </div>
-
 
 <div class="card">
 
 <h3>Points des élèves</h3>
 
-<div
-id="commerceList"
-class="small">
+<div id="commerceList">
 Chargement…
 </div>
 
@@ -551,11 +424,8 @@ Chargement…
 
 </aside>
 
-
 <section>
-
 <div id="mapA"></div>
-
 </section>
 
 </div>
@@ -563,13 +433,7 @@ Chargement…
 </section>
 
 
-<!-- ===================================================== -->
-<!-- B1 -->
-<!-- ===================================================== -->
-
-<section
-id="b1"
-class="panel">
+<section id="b1" class="panel">
 
 <div class="layout">
 
@@ -579,11 +443,6 @@ class="panel">
 
 <h2>B1 — étapes du circuit papal</h2>
 
-<p class="hint">
-Les petits cercles bleus correspondent aux étapes du circuit.
-Les marqueurs avec initiales correspondent aux élèves.
-</p>
-
 <div id="papalSteps"></div>
 
 <div class="toolbar">
@@ -592,9 +451,7 @@ Les marqueurs avec initiales correspondent aux élèves.
 id="fitRoute"
 class="secondary"
 type="button">
-
 🗺️ Voir Flores → Devoto
-
 </button>
 
 </div>
@@ -607,19 +464,14 @@ type="button">
 <h2>Créer l'audio d'un élève</h2>
 
 <div class="micBox">
-Chaque élève choisit un seul point précis sur la carte.
-Ce point est associé à son témoignage.
+Choisis un point sur la carte, puis enregistre ou joins un audio.
+Les photos sont automatiquement allégées avant l’envoi.
 </div>
 
 <form id="audioForm">
 
-<input
-id="bLat"
-type="hidden">
-
-<input
-id="bLng"
-type="hidden">
+<input id="bLat" type="hidden">
+<input id="bLng" type="hidden">
 
 <div class="toolbar">
 
@@ -627,78 +479,39 @@ type="hidden">
 id="placeBButton"
 class="secondary"
 type="button">
-
 📍 Placer mon point
-
 </button>
 
 </div>
 
-<div
-id="bPointStatus"
-class="status">
-
-Clique sur « Placer mon point », puis clique sur la carte B1.
-
+<div id="bPointStatus" class="status">
+Clique sur « Placer mon point », puis sur la carte B1.
 </div>
 
 <div class="two">
 
 <div>
-
-<label for="bEleve">
-Prénom
-</label>
-
-<input
-id="bEleve"
-required
-placeholder="Ex. Mateo">
-
+<label>Prénom</label>
+<input id="bEleve" required>
 </div>
 
 <div>
-
-<label for="bStep">
-Étape
-</label>
-
+<label>Étape</label>
 <select id="bStep"></select>
-
 </div>
 
 </div>
 
-<label for="bTitre">
-Titre de la petite affiche
-</label>
+<label>Titre de la petite affiche</label>
+<input id="bTitre">
 
-<input
-id="bTitre"
-placeholder="Ex. Un lieu de son enfance">
+<label>Mon appréciation</label>
+<textarea id="bAppreciation" required></textarea>
 
-<label for="bAppreciation">
-Mon appréciation
-</label>
+<label>Photo pour l'affiche (facultatif)</label>
+<input id="bImage" type="file" accept="image/*">
 
-<textarea
-id="bAppreciation"
-required
-placeholder="Je trouve ce lieu intéressant parce que…">
-</textarea>
-
-<label for="bImage">
-Photo pour l'affiche (facultatif)
-</label>
-
-<input
-id="bImage"
-type="file"
-accept="image/*">
-
-<label>
-Enregistrement
-</label>
+<label>Enregistrement</label>
 
 <div class="toolbar">
 
@@ -719,10 +532,7 @@ disabled>
 
 </div>
 
-<div
-id="recordState"
-class="status">
-</div>
+<div id="recordState" class="status"></div>
 
 <audio
 id="previewAudio"
@@ -730,9 +540,7 @@ controls
 hidden>
 </audio>
 
-<label for="bAudioFile">
-Ou joindre un fichier audio
-</label>
+<label>Ou joindre un fichier audio</label>
 
 <input
 id="bAudioFile"
@@ -743,17 +551,12 @@ accept="audio/*">
 class="primary"
 type="submit"
 style="width:100%;margin-top:12px">
-
 💾 Ajouter à la galerie
-
 </button>
 
 </form>
 
-<div
-id="b1Status"
-class="status">
-</div>
+<div id="b1Status" class="status"></div>
 
 </div>
 
@@ -762,9 +565,7 @@ class="status">
 
 <h3>Aperçu de l'affiche</h3>
 
-<div
-id="posterPreview"
-class="poster">
+<div id="posterPreview" class="poster">
 
 <div>
 
@@ -843,55 +644,45 @@ const DEVOTO=[
 ];
 
 
-/* ===================================================== */
-/* ONGlets */
-/* ===================================================== */
+/* ONGLETS */
 
 document
 .querySelectorAll(".tab")
 .forEach(button=>{
 
-  button.addEventListener(
-    "click",
-    ()=>{
+  button.onclick=()=>{
 
-      document
-      .querySelectorAll(".tab")
-      .forEach(x=>
-        x.classList.remove("active")
-      );
+    document
+    .querySelectorAll(".tab")
+    .forEach(x=>
+      x.classList.remove("active")
+    );
 
-      document
-      .querySelectorAll(".panel")
-      .forEach(x=>
-        x.classList.remove("active")
-      );
+    document
+    .querySelectorAll(".panel")
+    .forEach(x=>
+      x.classList.remove("active")
+    );
 
-      button
-      .classList
-      .add("active");
+    button.classList.add("active");
 
-      $(button.dataset.target)
-      .classList
-      .add("active");
+    $(button.dataset.target)
+    .classList.add("active");
 
-      setTimeout(
-        ()=>{
-          mapA.invalidateSize();
-          mapB.invalidateSize();
-        },
-        50
-      );
+    setTimeout(
+      ()=>{
+        mapA.invalidateSize();
+        mapB.invalidateSize();
+      },
+      50
+    );
 
-    }
-  );
+  };
 
 });
 
 
-/* ===================================================== */
 /* CARTES */
-/* ===================================================== */
 
 const mapA=
 L.map("mapA")
@@ -923,9 +714,7 @@ L.map("mapB")
 });
 
 
-/* ===================================================== */
-/* MARQUEURS ÉLÈVES */
-/* ===================================================== */
+/* MARQUEURS */
 
 function initials(name){
 
@@ -936,8 +725,8 @@ function initials(name){
   .split(/\s+/)
   .slice(0,2)
   .map(
-    part=>
-    part[0]?.toUpperCase()||""
+    s=>
+    s[0]?.toUpperCase()||""
   )
   .join("")
   ||"?";
@@ -959,9 +748,7 @@ function studentIcon(
       ?"b1"
       :""
     }">${
-      esc(
-        initials(name)
-      )
+      esc(initials(name))
     }</div>`,
 
     iconSize:[
@@ -979,26 +766,22 @@ function studentIcon(
 }
 
 
-/* ===================================================== */
 /* ÉTAT */
-/* ===================================================== */
 
 let state={
-
   commerces:[],
   steps:[],
   b1:[]
-
 };
 
 let cMarkers=[];
-let cPending=null;
-
 let bMarkers=[];
-let bPending=null;
-
 let routeMarkers=[];
+
 let routeLine=null;
+
+let cPending=null;
+let bPending=null;
 
 let placingA=false;
 let placingB=false;
@@ -1007,14 +790,13 @@ let mediaRecorder=null;
 let chunks=[];
 let recordedBlob=null;
 let mediaStream=null;
+
 let previewImageUrl="";
 
 
-/* ===================================================== */
 /* API */
-/* ===================================================== */
 
-function buildApiUrl(
+function apiUrl(
   action,
   params={}
 ){
@@ -1022,12 +804,10 @@ function buildApiUrl(
   const url=
   new URL(
     API,
-    window.location.origin
+    location.origin
   );
 
-  url
-  .searchParams
-  .set(
+  url.searchParams.set(
     "action",
     action
   );
@@ -1038,16 +818,14 @@ function buildApiUrl(
     ([key,value])=>{
 
       if(
-        value!==undefined
-        &&
         value!==null
+        &&
+        value!==undefined
       ){
 
-        url
-        .searchParams
-        .set(
+        url.searchParams.set(
           key,
-          String(value)
+          value
         );
 
       }
@@ -1072,19 +850,22 @@ async function api(
 
   const response=
   await fetch(
-    buildApiUrl(
+    apiUrl(
       action,
       params
     ),
     options
   );
 
-  const data=
-  await response
-  .json()
-  .catch(
-    ()=>({})
-  );
+  const text=
+  await response.text();
+
+  let data={};
+
+  try{
+    data=JSON.parse(text);
+  }
+  catch{}
 
   if(
     !response.ok
@@ -1092,6 +873,8 @@ async function api(
 
     throw new Error(
       data.error
+      ||
+      text
       ||
       `Erreur HTTP ${response.status}`
     );
@@ -1103,51 +886,43 @@ async function api(
 }
 
 
-/* ===================================================== */
-/* CHARGEMENT */
-/* ===================================================== */
+/* ACTUALISER */
+
+async function refresh(){
+
+  const data=
+  await api("state");
+
+  state=data;
+
+  renderCommerces();
+  renderSteps();
+  renderB1();
+
+}
+
 
 async function loadAll(){
 
   try{
 
-    const data=
-    await api(
-      "state"
-    );
+    await refresh();
 
-    state.commerces=
-    data.commerces||[];
-
-    state.steps=
-    data.steps||[];
-
-    state.b1=
-    data.b1||[];
-
-    $("dbState")
-    .textContent=
+    $("dbState").textContent=
     "✓ Base Netlify connectée — données partagées entre appareils";
 
-    $("dbState")
-    .className=
+    $("dbState").className=
     "online";
-
-    renderCommerces();
-    renderSteps();
-    renderB1();
 
   }
   catch(error){
 
-    $("dbState")
-    .textContent=
+    $("dbState").textContent=
     "⚠ Connexion à la base impossible : "
     +
     error.message;
 
-    $("dbState")
-    .className=
+    $("dbState").className=
     "online offline";
 
   }
@@ -1155,9 +930,9 @@ async function loadAll(){
 }
 
 
-/* ===================================================== */
+/* ============================= */
 /* A1 / A2 */
-/* ===================================================== */
+/* ============================= */
 
 function renderCommerces(){
 
@@ -1169,197 +944,156 @@ function renderCommerces(){
 
   cMarkers=[];
 
-  $("commerceList")
-  .innerHTML="";
+  $("commerceList").innerHTML="";
+
 
   state.commerces
-  .forEach(
-    place=>{
+  .forEach(place=>{
 
-      const lat=
-      Number(
-        place.latitude
-      );
+    const lat=
+    Number(place.latitude);
 
-      const lng=
-      Number(
-        place.longitude
-      );
+    const lng=
+    Number(place.longitude);
+
+    if(
+      !Number.isFinite(lat)
+      ||
+      !Number.isFinite(lng)
+    ){
+      return;
+    }
+
+
+    const marker=
+    L.marker(
+      [lat,lng],
+      {
+        icon:
+        studentIcon(
+          place.student_name,
+          place.level
+        )
+      }
+    )
+    .addTo(mapA)
+    .bindPopup(
+      `<strong>${
+        esc(place.student_name)
+      } — ${
+        esc(place.level)
+      }</strong><br>${
+        esc(place.place_name)
+      }<br>${
+        esc(place.recommendation)
+      }`
+    );
+
+    cMarkers.push(marker);
+
+
+    const card=
+    document.createElement("div");
+
+    card.className=
+    "entry";
+
+
+    card.innerHTML=
+
+    `<strong>${
+      esc(place.student_name)
+    } — ${
+      esc(place.place_name)
+    }</strong>`
+
+    +
+
+    `<div>
+      <span class="badge">${
+        esc(place.level)
+      }</span>
+
+      <span class="badge">${
+        esc(place.category||"")
+      }</span>
+    </div>`
+
+    +
+
+    `<div>${
+      esc(place.recommendation||"")
+    }</div>`;
+
+
+    const deleteButton=
+    document.createElement("button");
+
+    deleteButton.type=
+    "button";
+
+    deleteButton.className=
+    "danger";
+
+    deleteButton.textContent=
+    "🗑 Supprimer ce point";
+
+
+    deleteButton.onclick=
+    async()=>{
 
       if(
-        !Number.isFinite(lat)
-        ||
-        !Number.isFinite(lng)
+        !confirm(
+          `Supprimer le point de ${place.student_name} ?`
+        )
       ){
         return;
       }
 
-      const marker=
-      L.marker(
-        [lat,lng],
-        {
-          icon:
-          studentIcon(
-            place.student_name,
-            place.level
-          )
-        }
-      )
-      .addTo(mapA)
-      .bindPopup(
-        `<strong>${
-          esc(place.student_name)
-        } — ${
-          esc(place.level)
-        }</strong><br>${
-          esc(place.place_name)
-        }<br>${
-          esc(place.recommendation)
-        }`
-      );
+      try{
 
-      cMarkers
-      .push(marker);
+        await api(
+          "commerce-delete",
+          {
+            method:"DELETE"
+          },
+          {
+            id:place.id
+          }
+        );
+
+        await refresh();
+
+      }
+      catch(error){
+
+        alert(
+          error.message
+        );
+
+      }
+
+    };
 
 
-      const card=
-      document
-      .createElement(
-        "div"
-      );
-
-      card.className=
-      "entry";
-
-      card.innerHTML=
-      `<strong>${
-        esc(place.student_name)
-      } — ${
-        esc(place.place_name)
-      }</strong>`
-
-      +
-
-      `<div>
-      <span class="badge">${
-        esc(place.level)
-      }</span>
-      <span class="badge">${
-        esc(place.category)
-      }</span>
-      </div>`
-
-      +
-
-      `<div>${
-        esc(place.recommendation)
-      }</div>`
-
-      +
-
-      (
-        place.directions
-        ?
-        `<div class="small">
-        ➡ ${
-          esc(place.directions)
-        }
-        </div>`
-        :
-        ""
-      );
-
-
-      const deleteButton=
-      document
-      .createElement(
-        "button"
-      );
-
-      deleteButton.type=
-      "button";
-
-      deleteButton.className=
-      "danger";
-
-      deleteButton.style.marginTop=
-      "8px";
-
-      deleteButton.textContent=
-      "🗑 Supprimer ce point";
-
+    card.appendChild(
       deleteButton
-      .addEventListener(
-        "click",
-        async()=>{
+    );
 
-          const confirmed=
-          window.confirm(
-            `Supprimer le point de ${place.student_name} ?`
-          );
 
-          if(
-            !confirmed
-          ){
-            return;
-          }
-
-          try{
-
-            await api(
-              "commerce-delete",
-              {
-                method:"DELETE"
-              },
-              {
-                id:place.id
-              }
-            );
-
-            const data=
-            await api(
-              "state"
-            );
-
-            state.commerces=
-            data.commerces||[];
-
-            renderCommerces();
-
-          }
-          catch(error){
-
-            window.alert(
-              "Erreur : "
-              +
-              error.message
-            );
-
-          }
-
-        }
-      );
-
+    $("commerceList")
+    .appendChild(
       card
-      .appendChild(
-        deleteButton
-      );
+    );
 
-      $("commerceList")
-      .appendChild(
-        card
-      );
-
-    }
-  );
+  });
 
 
   if(
     !state.commerces.length
   ){
 
-    $("commerceList")
-    .textContent=
+    $("commerceList").textContent=
     "Aucun point pour le moment.";
 
   }
@@ -1367,1496 +1101,4 @@ function renderCommerces(){
 }
 
 
-$("placeAButton")
-.addEventListener(
-  "click",
-  ()=>{
-
-    placingA=true;
-
-    $("aPointStatus")
-    .textContent=
-    "✓ Maintenant, clique sur l’endroit exact sur la carte.";
-
-  }
-);
-
-
-mapA.on(
-  "click",
-  event=>{
-
-    if(
-      !placingA
-    ){
-      return;
-    }
-
-    $("cLat").value=
-    event
-    .latlng
-    .lat
-    .toFixed(6);
-
-    $("cLng").value=
-    event
-    .latlng
-    .lng
-    .toFixed(6);
-
-    if(
-      cPending
-    ){
-
-      mapA
-      .removeLayer(
-        cPending
-      );
-
-    }
-
-    const name=
-    $("cEleve")
-    .value
-    .trim()
-    ||
-    "A1/A2";
-
-    cPending=
-    L.marker(
-      event.latlng,
-      {
-        icon:
-        studentIcon(
-          name,
-          $("cNiveau").value
-        )
-      }
-    )
-    .addTo(mapA)
-    .bindPopup(
-      `<strong>${
-        esc(name)
-      }</strong><br>
-      Point choisi`
-    )
-    .openPopup();
-
-    placingA=false;
-
-    $("aPointStatus")
-    .textContent=
-    "✓ Point choisi. Complète la fiche puis enregistre.";
-
-  }
-);
-
-
-$("commerceForm")
-.addEventListener(
-  "submit",
-  async event=>{
-
-    event.preventDefault();
-
-    const lat=
-    Number(
-      $("cLat").value
-    );
-
-    const lng=
-    Number(
-      $("cLng").value
-    );
-
-    if(
-      !Number.isFinite(lat)
-      ||
-      !Number.isFinite(lng)
-    ){
-
-      $("commerceStatus")
-      .textContent=
-      "Place d'abord ton point sur la carte.";
-
-      return;
-    }
-
-    $("commerceStatus")
-    .textContent=
-    "Enregistrement…";
-
-    try{
-
-      await api(
-        "commerce",
-        {
-
-          method:"POST",
-
-          headers:{
-            "Content-Type":
-            "application/json"
-          },
-
-          body:
-          JSON.stringify({
-
-            student_name:
-            $("cEleve")
-            .value
-            .trim(),
-
-            level:
-            $("cNiveau")
-            .value,
-
-            place_name:
-            $("cNom")
-            .value
-            .trim(),
-
-            category:
-            $("cType")
-            .value,
-
-            recommendation:
-            $("cPourquoi")
-            .value
-            .trim(),
-
-            directions:
-            $("cImperatif")
-            .value
-            .trim(),
-
-            latitude:
-            lat,
-
-            longitude:
-            lng
-
-          })
-
-        }
-      );
-
-
-      if(
-        cPending
-      ){
-
-        mapA
-        .removeLayer(
-          cPending
-        );
-
-        cPending=null;
-
-      }
-
-      $("cLat").value="";
-      $("cLng").value="";
-
-      $("commerceStatus")
-      .textContent=
-      "✓ Point enregistré.";
-
-      const data=
-      await api(
-        "state"
-      );
-
-      state.commerces=
-      data.commerces||[];
-
-      renderCommerces();
-
-    }
-    catch(error){
-
-      $("commerceStatus")
-      .textContent=
-      "Erreur : "
-      +
-      error.message;
-
-    }
-
-  }
-);
-
-
-/* ===================================================== */
-/* ÉTAPES CIRCUIT PAPAL */
-/* ===================================================== */
-
-function renderSteps(){
-
-  routeMarkers
-  .forEach(
-    marker=>
-    mapB.removeLayer(marker)
-  );
-
-  routeMarkers=[];
-
-  if(
-    routeLine
-  ){
-
-    mapB
-    .removeLayer(
-      routeLine
-    );
-
-    routeLine=null;
-
-  }
-
-  $("papalSteps")
-  .innerHTML="";
-
-  $("bStep")
-  .innerHTML="";
-
-  const coordinates=[];
-
-  state.steps
-  .forEach(
-    (step,index)=>{
-
-      const option=
-      document
-      .createElement(
-        "option"
-      );
-
-      option.value=
-      step.id;
-
-      option.textContent=
-      `${index+1}. ${step.name}`;
-
-      $("bStep")
-      .appendChild(
-        option
-      );
-
-
-      const card=
-      document
-      .createElement(
-        "div"
-      );
-
-      card.className=
-      "step";
-
-      card.dataset.id=
-      step.id;
-
-      card.innerHTML=
-      `<div class="stepTitle">${
-        index+1
-      }. ${
-        esc(step.name)
-      }</div>
-      <div class="small">${
-        esc(
-          step.address
-          ||
-          "Adresse à compléter"
-        )
-      }</div>`;
-
-      card
-      .addEventListener(
-        "click",
-        ()=>{
-
-          $("bStep")
-          .value=
-          step.id;
-
-          selectStep(
-            step.id
-          );
-
-        }
-      );
-
-      $("papalSteps")
-      .appendChild(
-        card
-      );
-
-
-      if(
-        step.latitude!==null
-        &&
-        step.longitude!==null
-      ){
-
-        const lat=
-        Number(
-          step.latitude
-        );
-
-        const lng=
-        Number(
-          step.longitude
-        );
-
-        if(
-          Number.isFinite(lat)
-          &&
-          Number.isFinite(lng)
-        ){
-
-          const marker=
-          L.circleMarker(
-            [lat,lng],
-            {
-              radius:6,
-              color:varBlue(),
-              weight:2,
-              fillColor:"#ffffff",
-              fillOpacity:1
-            }
-          )
-          .addTo(mapB)
-          .bindPopup(
-            `<strong>${
-              index+1
-            }. ${
-              esc(step.name)
-            }</strong><br>${
-              esc(step.address||"")
-            }`
-          );
-
-          routeMarkers
-          .push(marker);
-
-          coordinates
-          .push(
-            [lat,lng]
-          );
-
-        }
-
-      }
-
-    }
-  );
-
-
-  if(
-    coordinates.length>1
-  ){
-
-    routeLine=
-    L.polyline(
-      coordinates,
-      {
-        weight:3,
-        opacity:.5,
-        dashArray:"6,6"
-      }
-    )
-    .addTo(mapB);
-
-  }
-
-
-  if(
-    state.steps.length
-  ){
-
-    selectStep(
-      state.steps[0].id
-    );
-
-  }
-
-}
-
-
-function varBlue(){
-  return "#245bd8";
-}
-
-
-function selectStep(id){
-
-  document
-  .querySelectorAll(".step")
-  .forEach(
-    item=>
-    item.classList.toggle(
-      "active",
-      item.dataset.id===id
-    )
-  );
-
-  updatePoster();
-
-}
-
-
-$("bStep")
-.addEventListener(
-  "change",
-  ()=>{
-
-    selectStep(
-      $("bStep").value
-    );
-
-  }
-);
-
-
-$("fitRoute")
-.addEventListener(
-  "click",
-  ()=>{
-
-    mapB
-    .fitBounds(
-      [
-        FLORES,
-        DEVOTO
-      ],
-      {
-        padding:[
-          25,
-          25
-        ]
-      }
-    );
-
-  }
-);
-
-
-/* ===================================================== */
-/* POINT B1 */
-/* ===================================================== */
-
-$("placeBButton")
-.addEventListener(
-  "click",
-  ()=>{
-
-    placingB=true;
-
-    $("bPointStatus")
-    .textContent=
-    "✓ Maintenant, clique sur l’endroit exact sur la carte.";
-
-  }
-);
-
-
-mapB.on(
-  "click",
-  event=>{
-
-    if(
-      !placingB
-    ){
-      return;
-    }
-
-    $("bLat").value=
-    event
-    .latlng
-    .lat
-    .toFixed(6);
-
-    $("bLng").value=
-    event
-    .latlng
-    .lng
-    .toFixed(6);
-
-    if(
-      bPending
-    ){
-
-      mapB
-      .removeLayer(
-        bPending
-      );
-
-    }
-
-    const name=
-    $("bEleve")
-    .value
-    .trim()
-    ||
-    "B1";
-
-    bPending=
-    L.marker(
-      event.latlng,
-      {
-        icon:
-        studentIcon(
-          name,
-          "B1"
-        )
-      }
-    )
-    .addTo(mapB)
-    .bindPopup(
-      `<strong>${
-        esc(name)
-      } — B1</strong><br>
-      Point choisi`
-    )
-    .openPopup();
-
-    placingB=false;
-
-    $("bPointStatus")
-    .textContent=
-    "✓ Point choisi. Tu peux maintenant enregistrer ton audio.";
-
-  }
-);
-
-
-/* ===================================================== */
-/* AUDIO */
-/* ===================================================== */
-
-function supportedMime(){
-
-  if(
-    !window.MediaRecorder
-  ){
-    return "";
-  }
-
-  const types=[
-
-    "audio/webm;codecs=opus",
-
-    "audio/webm",
-
-    "audio/mp4",
-
-    "audio/ogg;codecs=opus"
-
-  ];
-
-  return (
-    types.find(
-      type=>
-      MediaRecorder
-      .isTypeSupported?.(
-        type
-      )
-    )
-    ||
-    ""
-  );
-
-}
-
-
-$("recordBtn")
-.addEventListener(
-  "click",
-  async()=>{
-
-    if(
-      !navigator
-      .mediaDevices
-      ?.getUserMedia
-      ||
-      !window.MediaRecorder
-    ){
-
-      $("recordState")
-      .textContent=
-      "Ce navigateur ne permet pas l'enregistrement direct.";
-
-      return;
-    }
-
-    try{
-
-      mediaStream=
-      await navigator
-      .mediaDevices
-      .getUserMedia({
-        audio:true
-      });
-
-      chunks=[];
-
-      const mime=
-      supportedMime();
-
-      mediaRecorder=
-      mime
-      ?
-      new MediaRecorder(
-        mediaStream,
-        {
-          mimeType:mime
-        }
-      )
-      :
-      new MediaRecorder(
-        mediaStream
-      );
-
-      mediaRecorder
-      .ondataavailable=
-      event=>{
-
-        if(
-          event.data
-          &&
-          event.data.size
-        ){
-
-          chunks
-          .push(
-            event.data
-          );
-
-        }
-
-      };
-
-
-      mediaRecorder
-      .onstop=
-      ()=>{
-
-        recordedBlob=
-        new Blob(
-          chunks,
-          {
-            type:
-            mediaRecorder.mimeType
-            ||
-            mime
-            ||
-            "audio/webm"
-          }
-        );
-
-        $("previewAudio")
-        .src=
-        URL.createObjectURL(
-          recordedBlob
-        );
-
-        $("previewAudio")
-        .hidden=
-        false;
-
-        $("recordState")
-        .textContent=
-        "✓ Audio enregistré.";
-
-        mediaStream
-        ?.getTracks()
-        .forEach(
-          track=>
-          track.stop()
-        );
-
-        mediaStream=null;
-
-      };
-
-
-      mediaRecorder
-      .start(
-        250
-      );
-
-      $("recordBtn")
-      .disabled=
-      true;
-
-      $("stopBtn")
-      .disabled=
-      false;
-
-      $("recordState")
-      .innerHTML=
-      '<span class="recordDot"></span>Enregistrement en cours…';
-
-    }
-    catch(error){
-
-      console.error(
-        "Erreur microphone :",
-        error
-      );
-
-      $("recordState")
-      .textContent=
-      `Micro : ${
-        error.name||"Erreur"
-      } — ${
-        error.message||"indisponible"
-      }`;
-
-    }
-
-  }
-);
-
-
-$("stopBtn")
-.addEventListener(
-  "click",
-  ()=>{
-
-    if(
-      mediaRecorder
-      &&
-      mediaRecorder.state!=="inactive"
-    ){
-
-      mediaRecorder
-      .stop();
-
-    }
-
-    $("recordBtn")
-    .disabled=
-    false;
-
-    $("stopBtn")
-    .disabled=
-    true;
-
-  }
-);
-
-
-/* ===================================================== */
-/* AFFICHE */
-/* ===================================================== */
-
-function updatePoster(){
-
-  const step=
-  state.steps.find(
-    item=>
-    item.id===
-    $("bStep").value
-  )
-  ||
-  state.steps[0];
-
-
-  const title=
-  $("bTitre")
-  .value
-  .trim()
-  ||
-  (
-    step
-    ?
-    step.name
-    :
-    "Choisissez une étape"
-  );
-
-
-  const text=
-  $("bAppreciation")
-  .value
-  .trim()
-  ||
-  "Votre appréciation apparaîtra ici.";
-
-
-  const student=
-  $("bEleve")
-  .value
-  .trim()
-  ||
-  "Témoignage B1";
-
-
-  $("posterPreview")
-  .innerHTML=
-
-  `<div>`
-
-  +
-
-  `<div class="title">${
-    esc(title)
-  }</div>`
-
-  +
-
-  (
-    previewImageUrl
-    ?
-    `<img src="${
-      previewImageUrl
-    }" alt="">`
-    :
-    ""
-  )
-
-  +
-
-  `<div class="quote">
-  « ${
-    esc(text)
-  } »
-  </div>`
-
-  +
-
-  `</div>`
-
-  +
-
-  `<div class="by">
-  ${
-    esc(student)
-  }${
-    step
-    ?
-    ` • ${esc(step.name)}`
-    :
-    ""
-  }
-  </div>`;
-
-}
-
-
-[
-  "bTitre",
-  "bAppreciation",
-  "bEleve"
-]
-.forEach(
-  id=>{
-
-    $(id)
-    .addEventListener(
-      "input",
-      updatePoster
-    );
-
-  }
-);
-
-
-$("bImage")
-.addEventListener(
-  "change",
-  ()=>{
-
-    if(
-      previewImageUrl
-    ){
-
-      URL
-      .revokeObjectURL(
-        previewImageUrl
-      );
-
-    }
-
-    const file=
-    $("bImage")
-    .files[0];
-
-    previewImageUrl=
-    file
-    ?
-    URL.createObjectURL(
-      file
-    )
-    :
-    "";
-
-    updatePoster();
-
-  }
-);
-
-
-/* ===================================================== */
-/* ENREGISTREMENT B1 */
-/* ===================================================== */
-
-$("audioForm")
-.addEventListener(
-  "submit",
-  async event=>{
-
-    event.preventDefault();
-
-    const audio=
-    recordedBlob
-    ||
-    $("bAudioFile")
-    .files[0];
-
-
-    if(
-      !audio
-    ){
-
-      $("b1Status")
-      .textContent=
-      "Enregistre ou joins d'abord un audio.";
-
-      return;
-    }
-
-
-    const lat=
-    Number(
-      $("bLat").value
-    );
-
-    const lng=
-    Number(
-      $("bLng").value
-    );
-
-
-    if(
-      !Number.isFinite(lat)
-      ||
-      !Number.isFinite(lng)
-    ){
-
-      $("b1Status")
-      .textContent=
-      "Place d’abord ton point sur la carte.";
-
-      return;
-    }
-
-
-    $("b1Status")
-    .textContent=
-    "Enregistrement en ligne…";
-
-
-    const formData=
-    new FormData();
-
-
-    formData.append(
-      "student_name",
-      $("bEleve")
-      .value
-      .trim()
-    );
-
-
-    formData.append(
-      "step_id",
-      $("bStep").value
-    );
-
-
-    formData.append(
-      "title",
-      $("bTitre")
-      .value
-      .trim()
-    );
-
-
-    formData.append(
-      "appreciation",
-      $("bAppreciation")
-      .value
-      .trim()
-    );
-
-
-    formData.append(
-      "latitude",
-      String(lat)
-    );
-
-
-    formData.append(
-      "longitude",
-      String(lng)
-    );
-
-
-    let extension=
-    "webm";
-
-    if(
-      (audio.type||"")
-      .includes("mp4")
-    ){
-      extension="m4a";
-    }
-
-    if(
-      (audio.type||"")
-      .includes("ogg")
-    ){
-      extension="ogg";
-    }
-
-
-    formData.append(
-      "audio",
-      audio,
-      `audio.${extension}`
-    );
-
-
-    const image=
-    $("bImage")
-    .files[0];
-
-
-    if(
-      image
-    ){
-
-      formData.append(
-        "image",
-        image,
-        image.name
-        ||
-        "image.jpg"
-      );
-
-    }
-
-
-    try{
-
-      await api(
-        "b1",
-        {
-          method:"POST",
-          body:formData
-        }
-      );
-
-
-      recordedBlob=null;
-
-
-      $("previewAudio")
-      .hidden=
-      true;
-
-
-      $("previewAudio")
-      .removeAttribute(
-        "src"
-      );
-
-
-      $("bAudioFile")
-      .value="";
-
-
-      $("bLat")
-      .value="";
-
-
-      $("bLng")
-      .value="";
-
-
-      if(
-        bPending
-      ){
-
-        mapB
-        .removeLayer(
-          bPending
-        );
-
-        bPending=null;
-
-      }
-
-
-      $("b1Status")
-      .textContent=
-      "✓ Témoignage et point enregistrés.";
-
-
-      const data=
-      await api(
-        "state"
-      );
-
-
-      state.b1=
-      data.b1||[];
-
-
-      renderB1();
-
-    }
-    catch(error){
-
-      $("b1Status")
-      .textContent=
-      "Erreur : "
-      +
-      error.message;
-
-    }
-
-  }
-);
-
-
-/* ===================================================== */
-/* AFFICHAGE B1 */
-/* ===================================================== */
-
-function renderB1(){
-
-  bMarkers
-  .forEach(
-    marker=>
-    mapB.removeLayer(marker)
-  );
-
-  bMarkers=[];
-
-
-  $("recordingList")
-  .innerHTML="";
-
-
-  state.b1
-  .forEach(
-    contribution=>{
-
-      const step=
-      state.steps.find(
-        item=>
-        item.id===
-        contribution.step_id
-      );
-
-
-      const lat=
-      Number(
-        contribution.latitude
-      );
-
-
-      const lng=
-      Number(
-        contribution.longitude
-      );
-
-
-      /* 1 ÉLÈVE = 1 SEUL POINT */
-
-      if(
-        Number.isFinite(lat)
-        &&
-        Number.isFinite(lng)
-      ){
-
-        const marker=
-        L.marker(
-          [lat,lng],
-          {
-            icon:
-            studentIcon(
-              contribution.student_name,
-              "B1"
-            )
-          }
-        )
-        .addTo(mapB)
-        .bindPopup(
-          `<strong>${
-            esc(contribution.student_name)
-          } — B1</strong><br>${
-            esc(
-              step?.name
-              ||
-              ""
-            )
-          }<br>${
-            esc(
-              contribution.appreciation
-            )
-          }`
-        );
-
-        bMarkers
-        .push(
-          marker
-        );
-
-      }
-
-
-      const card=
-      document
-      .createElement(
-        "div"
-      );
-
-      card.className=
-      "recording";
-
-
-      const audioUrl=
-      contribution.audio_key
-      ?
-      buildApiUrl(
-        "media",
-        {
-          key:
-          contribution.audio_key
-        }
-      )
-      :
-      "";
-
-
-      const imageUrl=
-      contribution.image_key
-      ?
-      buildApiUrl(
-        "media",
-        {
-          key:
-          contribution.image_key
-        }
-      )
-      :
-      "";
-
-
-      card.innerHTML=
-
-      `<div class="poster">`
-
-      +
-
-      `<div>`
-
-      +
-
-      `<div class="title">${
-        esc(
-          contribution.title
-          ||
-          step?.name
-          ||
-          "Témoignage"
-        )
-      }</div>`
-
-      +
-
-      (
-        imageUrl
-        ?
-        `<img src="${
-          imageUrl
-        }" alt="">`
-        :
-        ""
-      )
-
-      +
-
-      `<div class="quote">
-      « ${
-        esc(
-          contribution.appreciation
-        )
-      } »
-      </div>`
-
-      +
-
-      `</div>`
-
-      +
-
-      `<div class="by">
-      ${
-        esc(
-          contribution.student_name
-        )
-      } • ${
-        esc(
-          step?.name
-          ||
-          "circuit papal"
-        )
-      }
-      </div>`
-
-      +
-
-      `</div>`
-
-      +
-
-      (
-        audioUrl
-        ?
-        `<audio
-        controls
-        preload="metadata"
-        src="${
-          audioUrl
-        }">
-        </audio>`
-        :
-        ""
-      );
-
-
-      const deleteButton=
-      document
-      .createElement(
-        "button"
-      );
-
-
-      deleteButton.type=
-      "button";
-
-
-      deleteButton.className=
-      "danger";
-
-
-      deleteButton.style.marginTop=
-      "8px";
-
-
-      deleteButton.textContent=
-      "🗑 Supprimer ce témoignage";
-
-
-      deleteButton
-      .addEventListener(
-        "click",
-        async()=>{
-
-          const confirmed=
-          window.confirm(
-            `Supprimer le témoignage de ${contribution.student_name} ?`
-          );
-
-          if(
-            !confirmed
-          ){
-            return;
-          }
-
-
-          try{
-
-            await api(
-              "b1-delete",
-              {
-                method:"DELETE"
-              },
-              {
-                id:
-                contribution.id
-              }
-            );
-
-
-            const data=
-            await api(
-              "state"
-            );
-
-
-            state.b1=
-            data.b1||[];
-
-
-            renderB1();
-
-          }
-          catch(error){
-
-            window.alert(
-              "Erreur : "
-              +
-              error.message
-            );
-
-          }
-
-        }
-      );
-
-
-      card
-      .appendChild(
-        deleteButton
-      );
-
-
-      $("recordingList")
-      .appendChild(
-        card
-      );
-
-    }
-  );
-
-
-  if(
-    !state.b1.length
-  ){
-
-    $("recordingList")
-    .innerHTML=
-    '<p class="small">Aucun témoignage pour le moment.</p>';
-
-  }
-
-}
-
-
-/* ===================================================== */
-/* DÉMARRAGE */
-/* ===================================================== */
-
-loadAll();
-
-})();
-</script>
-
-</body>
-</html>
+$("placeAButton").
