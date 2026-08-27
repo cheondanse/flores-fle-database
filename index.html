@@ -261,12 +261,23 @@ button:disabled{
   margin:10px 0;
 }
 
-.poster img{
+.thumb{
   width:100%;
   max-height:180px;
   object-fit:cover;
   border-radius:10px;
   margin:10px 0;
+  cursor:zoom-in;
+}
+
+.popup-thumb{
+  width:160px;
+  max-width:100%;
+  height:100px;
+  object-fit:cover;
+  border-radius:8px;
+  margin-top:8px;
+  cursor:zoom-in;
 }
 
 .poster .by{
@@ -326,6 +337,43 @@ audio{
   font-size:.86rem;
 }
 
+/* MODALE IMAGE */
+
+#imageModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  z-index:99999;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+#imageModal.open{
+  display:flex;
+}
+
+#imageModal img{
+  max-width:96vw;
+  max-height:90vh;
+  object-fit:contain;
+  border-radius:10px;
+}
+
+#closeModal{
+  position:absolute;
+  top:14px;
+  right:14px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#fff;
+  color:#000;
+  font-size:24px;
+  font-weight:700;
+}
+
 @media(max-width:930px){
   .layout{grid-template-columns:1fr}
   .two{grid-template-columns:1fr}
@@ -358,10 +406,11 @@ Connexion à la base…
 <aside class="stack">
 
 <div class="card">
+
 <h2>A1 / A2 — ajouter un lieu</h2>
 
 <p class="hint">
-Chaque contribution correspond à un seul point. Aucun itinéraire n'est tracé entre les élèves.
+Chaque contribution correspond à un seul point. Les points A1/A2 et B1 restent visibles sur les deux cartes.
 </p>
 
 <form id="commerceForm">
@@ -390,6 +439,7 @@ Chaque contribution correspond à un seul point. Aucun itinéraire n'est tracé 
 <input id="cNom" required placeholder="Ex. une boulangerie">
 
 <label>Catégorie</label>
+
 <select id="cType">
 <option>Boulangerie</option>
 <option>Café</option>
@@ -402,38 +452,59 @@ Chaque contribution correspond à un seul point. Aucun itinéraire n'est tracé 
 </select>
 
 <label>Pourquoi le recommandes-tu ?</label>
-<textarea id="cPourquoi" required placeholder="J'aime ce lieu parce que… / Je le recommande parce que…"></textarea>
+<textarea id="cPourquoi" required placeholder="Je le recommande parce que…"></textarea>
 
 <label>Pour y aller…</label>
 <input id="cImperatif" placeholder="Continuez tout droit. Tournez à gauche…">
 
+<label>Photo du lieu (facultatif)</label>
+<input id="cImage" type="file" accept="image/*">
+
 <div class="toolbar">
-<button id="placeAButton" class="secondary" type="button">📍 Placer mon point</button>
+<button id="placeAButton" class="secondary" type="button">
+📍 Placer mon point
+</button>
 </div>
 
 <div id="aPointStatus" class="status">
 Clique sur « Placer mon point », puis touche la carte.
 </div>
 
-<button class="primary" type="submit" style="width:100%;margin-top:12px">
+<button
+class="primary"
+type="submit"
+style="width:100%;margin-top:12px">
 ➕ Enregistrer mon point
 </button>
 
 </form>
 
 <div id="commerceStatus" class="status"></div>
+
 </div>
 
+
 <div class="card">
+
 <h3>Points des élèves</h3>
-<div id="commerceList" class="small">Chargement…</div>
+
+<div id="commerceList" class="small">
+Chargement…
+</div>
+
 </div>
 
 </aside>
 
+
 <section>
+
 <div id="mapA"></div>
-<div class="mapNote">🗺️ Utilise le contrôle en haut à droite de la carte pour passer de « Plan » à « Satellite ».</div>
+
+<div class="mapNote">
+🗺️ Les marqueurs orange sont A1/A2. Les marqueurs bleus sont B1.
+</div>
+
 </section>
 
 </div>
@@ -441,22 +512,32 @@ Clique sur « Placer mon point », puis touche la carte.
 
 
 <section id="b1" class="panel">
+
 <div class="layout">
 
 <aside class="stack">
 
 <div class="card">
+
 <h2>B1 — étapes du circuit papal</h2>
 
 <p class="hint">
-Les étapes officielles restent visibles. Le point personnel de l'élève est indépendant de l'étape sélectionnée.
+Les étapes officielles restent visibles. Les points personnels des élèves A1/A2 et B1 apparaissent aussi sur cette carte.
 </p>
 
 <div id="papalSteps"></div>
 
 <div class="toolbar">
-<button id="fitRoute" class="secondary" type="button">🗺️ Voir Flores → Devoto</button>
+
+<button
+id="fitRoute"
+class="secondary"
+type="button">
+🗺️ Voir Flores → Devoto
+</button>
+
 </div>
+
 </div>
 
 
@@ -465,7 +546,7 @@ Les étapes officielles restent visibles. Le point personnel de l'élève est in
 <h2>Créer l'audio d'un élève</h2>
 
 <div class="micBox">
-L'enregistrement audio fonctionne comme dans la version précédente. Pour un nouveau témoignage, place aussi le point personnel de l'élève sur la carte.
+L'enregistrement audio fonctionne comme avant. Place aussi le point personnel correspondant au lieu dont parle l'élève.
 </div>
 
 <form id="audioForm">
@@ -497,7 +578,14 @@ L'enregistrement audio fonctionne comme dans la version précédente. Pour un no
 <input id="bImage" type="file" accept="image/*">
 
 <div class="toolbar">
-<button id="placeBButton" class="secondary" type="button">📍 Placer mon point</button>
+
+<button
+id="placeBButton"
+class="secondary"
+type="button">
+📍 Placer mon point
+</button>
+
 </div>
 
 <div id="bPointStatus" class="status">
@@ -507,8 +595,22 @@ Clique sur « Placer mon point », puis touche la carte B1.
 <label>Enregistrement</label>
 
 <div class="toolbar">
-<button id="recordBtn" class="good" type="button">🎙️ Enregistrer</button>
-<button id="stopBtn" class="danger" type="button" disabled>⏹ Arrêter</button>
+
+<button
+id="recordBtn"
+class="good"
+type="button">
+🎙️ Enregistrer
+</button>
+
+<button
+id="stopBtn"
+class="danger"
+type="button"
+disabled>
+⏹ Arrêter
+</button>
+
 </div>
 
 <div id="recordState" class="status"></div>
@@ -516,9 +618,16 @@ Clique sur « Placer mon point », puis touche la carte B1.
 <audio id="previewAudio" controls hidden></audio>
 
 <label>Ou joindre un fichier audio</label>
-<input id="bAudioFile" type="file" accept="audio/*">
 
-<button class="primary" type="submit" style="width:100%;margin-top:12px">
+<input
+id="bAudioFile"
+type="file"
+accept="audio/*">
+
+<button
+class="primary"
+type="submit"
+style="width:100%;margin-top:12px">
 💾 Ajouter à la galerie
 </button>
 
@@ -536,8 +645,15 @@ Clique sur « Placer mon point », puis touche la carte B1.
 <div id="posterPreview" class="poster">
 
 <div>
-<div class="title">Choisissez une étape</div>
-<div class="quote">« Votre appréciation apparaîtra ici. »</div>
+
+<div class="title">
+Choisissez une étape
+</div>
+
+<div class="quote">
+« Votre appréciation apparaîtra ici. »
+</div>
+
 </div>
 
 <div class="by">
@@ -555,11 +671,16 @@ Témoignage B1
 
 <div id="mapB"></div>
 
-<div class="mapNote">🛰️ La vue « Satellite » montre les bâtiments depuis le dessus. Elle ne fournit pas une navigation intérieure type Google Earth.</div>
+<div class="mapNote">
+🛰️ Les deux niveaux d'élèves restent visibles sur cette carte.
+</div>
 
 <div class="card">
+
 <h2>🎧 Galerie B1</h2>
+
 <div id="recordingList"></div>
+
 </div>
 
 </section>
@@ -568,6 +689,14 @@ Témoignage B1
 </section>
 
 </main>
+
+
+<!-- MODALE IMAGE -->
+
+<div id="imageModal">
+<button id="closeModal" type="button">✕</button>
+<img id="modalImage" alt="">
+</div>
 
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -603,7 +732,71 @@ const DEVOTO=[
 ];
 
 
-/* ONGLETS */
+/* MODALE IMAGE */
+
+function openImage(url){
+
+  if(!url){
+    return;
+  }
+
+  $("modalImage").src=
+  url;
+
+  $("imageModal")
+  .classList
+  .add("open");
+
+}
+
+function closeImage(){
+
+  $("imageModal")
+  .classList
+  .remove("open");
+
+  $("modalImage")
+  .removeAttribute("src");
+
+}
+
+$("closeModal")
+.addEventListener(
+  "click",
+  closeImage
+);
+
+$("imageModal")
+.addEventListener(
+  "click",
+  event=>{
+
+    if(
+      event.target===
+      $("imageModal")
+    ){
+      closeImage();
+    }
+
+  }
+);
+
+document
+.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      event.key==="Escape"
+    ){
+      closeImage();
+    }
+
+  }
+);
+
+
+/* ONGLET */
 
 document
 .querySelectorAll(".tab")
@@ -625,10 +818,13 @@ document
         x.classList.remove("active")
       );
 
-      button.classList.add("active");
+      button
+      .classList
+      .add("active");
 
       $(button.dataset.target)
-      .classList.add("active");
+      .classList
+      .add("active");
 
       setTimeout(
         ()=>{
@@ -644,7 +840,7 @@ document
 });
 
 
-/* CARTES + FONDS */
+/* FONDS DE CARTES */
 
 const planA=
 L.tileLayer(
@@ -718,10 +914,6 @@ L.control.layers(
   {
     "Plan":planA,
     "Satellite":satelliteA
-  },
-  null,
-  {
-    collapsed:true
   }
 )
 .addTo(mapA);
@@ -730,10 +922,6 @@ L.control.layers(
   {
     "Plan":planB,
     "Satellite":satelliteB
-  },
-  null,
-  {
-    collapsed:true
   }
 )
 .addTo(mapB);
@@ -801,14 +989,14 @@ let state={
   b1:[]
 };
 
-let cMarkers=[];
-let cPending=null;
-
-let bMarkers=[];
-let bPending=null;
+let studentMarkersA=[];
+let studentMarkersB=[];
 
 let routeMarkers=[];
 let routeLine=null;
+
+let cPending=null;
+let bPending=null;
 
 let placingA=false;
 let placingB=false;
@@ -904,6 +1092,48 @@ async function api(
 }
 
 
+/* POPUP */
+
+function popupImageHtml(url){
+
+  if(!url){
+    return "";
+  }
+
+  return `
+  <img
+    src="${url}"
+    class="popup-thumb"
+    data-full-image="${url}"
+    alt=""
+  >
+  `;
+}
+
+document
+.addEventListener(
+  "click",
+  event=>{
+
+    const img=
+    event.target.closest(
+      "[data-full-image]"
+    );
+
+    if(
+      img
+    ){
+
+      openImage(
+        img.dataset.fullImage
+      );
+
+    }
+
+  }
+);
+
+
 /* CHARGEMENT */
 
 async function loadAll(){
@@ -928,6 +1158,7 @@ async function loadAll(){
     renderCommerces();
     renderSteps();
     renderB1();
+    renderAllStudentMarkers();
 
   }
   catch(error){
@@ -955,11 +1186,11 @@ async function loadAll(){
 }
 
 
-/* A1 / A2 */
+/* TOUS LES POINTS SUR LES DEUX CARTES */
 
-function renderCommerces(){
+function clearStudentMarkers(){
 
-  cMarkers
+  studentMarkersA
   .forEach(
     marker=>
     mapA.removeLayer(
@@ -967,7 +1198,254 @@ function renderCommerces(){
     )
   );
 
-  cMarkers=[];
+  studentMarkersB
+  .forEach(
+    marker=>
+    mapB.removeLayer(
+      marker
+    )
+  );
+
+  studentMarkersA=[];
+  studentMarkersB=[];
+
+}
+
+function addStudentMarkerToBoth(
+  latitude,
+  longitude,
+  icon,
+  popup
+){
+
+  const markerA=
+  L.marker(
+    [
+      latitude,
+      longitude
+    ],
+    {
+      icon
+    }
+  )
+  .addTo(mapA)
+  .bindPopup(
+    popup
+  );
+
+  const markerB=
+  L.marker(
+    [
+      latitude,
+      longitude
+    ],
+    {
+      icon
+    }
+  )
+  .addTo(mapB)
+  .bindPopup(
+    popup
+  );
+
+  studentMarkersA
+  .push(
+    markerA
+  );
+
+  studentMarkersB
+  .push(
+    markerB
+  );
+
+}
+
+function renderAllStudentMarkers(){
+
+  clearStudentMarkers();
+
+  state.commerces
+  .forEach(place=>{
+
+    const latitude=
+    Number(
+      place.latitude
+    );
+
+    const longitude=
+    Number(
+      place.longitude
+    );
+
+    if(
+      !Number.isFinite(latitude)
+      ||
+      !Number.isFinite(longitude)
+    ){
+      return;
+    }
+
+    const imageUrl=
+    place.image_key
+    ?
+    apiUrl(
+      "media",
+      {
+        key:
+          place.image_key
+      }
+    )
+    :
+    "";
+
+    const popup=
+
+    `<strong>${
+      esc(
+        place.student_name
+      )
+    } — ${
+      esc(
+        place.level
+      )
+    }</strong><br>`
+
+    +
+
+    `<strong>${
+      esc(
+        place.place_name
+      )
+    }</strong><br>`
+
+    +
+
+    `${
+      esc(
+        place.recommendation||""
+      )
+    }`
+
+    +
+
+    popupImageHtml(
+      imageUrl
+    );
+
+    addStudentMarkerToBoth(
+      latitude,
+      longitude,
+      studentIcon(
+        place.student_name,
+        place.level
+      ),
+      popup
+    );
+
+  });
+
+
+  state.b1
+  .forEach(contribution=>{
+
+    if(
+      contribution.latitude===null
+      ||
+      contribution.latitude===undefined
+      ||
+      contribution.longitude===null
+      ||
+      contribution.longitude===undefined
+    ){
+      return;
+    }
+
+    const latitude=
+    Number(
+      contribution.latitude
+    );
+
+    const longitude=
+    Number(
+      contribution.longitude
+    );
+
+    if(
+      !Number.isFinite(latitude)
+      ||
+      !Number.isFinite(longitude)
+    ){
+      return;
+    }
+
+    const step=
+    state.steps.find(
+      item=>
+      item.id===
+      contribution.step_id
+    );
+
+    const imageUrl=
+    contribution.image_key
+    ?
+    apiUrl(
+      "media",
+      {
+        key:
+          contribution.image_key
+      }
+    )
+    :
+    "";
+
+    const popup=
+
+    `<strong>${
+      esc(
+        contribution.student_name
+      )
+    } — B1</strong><br>`
+
+    +
+
+    `${
+      esc(
+        step?.name||""
+      )
+    }<br>`
+
+    +
+
+    `${
+      esc(
+        contribution.appreciation||""
+      )
+    }`
+
+    +
+
+    popupImageHtml(
+      imageUrl
+    );
+
+    addStudentMarkerToBoth(
+      latitude,
+      longitude,
+      studentIcon(
+        contribution.student_name,
+        "B1"
+      ),
+      popup
+    );
+
+  });
+
+}
+
+
+/* A1/A2 LISTE */
+
+function renderCommerces(){
 
   $("commerceList")
   .innerHTML="";
@@ -976,69 +1454,18 @@ function renderCommerces(){
   .forEach(
     (place,index)=>{
 
-      const latitude=
-      Number(
-        place.latitude
-      );
-
-      const longitude=
-      Number(
-        place.longitude
-      );
-
-      if(
-        !Number.isFinite(
-          latitude
-        )
-        ||
-        !Number.isFinite(
-          longitude
-        )
-      ){
-        return;
-      }
-
-      const marker=
-      L.marker(
-        [
-          latitude,
-          longitude
-        ],
+      const imageUrl=
+      place.image_key
+      ?
+      apiUrl(
+        "media",
         {
-          icon:
-          studentIcon(
-            place.student_name,
-            place.level
-          )
+          key:
+            place.image_key
         }
       )
-      .addTo(
-        mapA
-      )
-      .bindPopup(
-        `<strong>${
-          esc(
-            place.student_name
-          )
-        } — ${
-          esc(
-            place.level
-          )
-        }</strong><br>${
-          esc(
-            place.place_name
-          )
-        }<br>${
-          esc(
-            place.recommendation
-          )
-        }`
-      );
-
-      cMarkers
-      .push(
-        marker
-      );
+      :
+      "";
 
       const card=
       document
@@ -1074,7 +1501,7 @@ function renderCommerces(){
 
       <span class="badge">${
         esc(
-          place.category
+          place.category||""
         )
       }</span>
       </div>`
@@ -1083,7 +1510,7 @@ function renderCommerces(){
 
       `<div>${
         esc(
-          place.recommendation
+          place.recommendation||""
         )
       }</div>`
 
@@ -1099,6 +1526,21 @@ function renderCommerces(){
           )
         }
         </div>`
+        :
+        ""
+      )
+
+      +
+
+      (
+        imageUrl
+        ?
+        `<img
+          src="${imageUrl}"
+          class="thumb"
+          data-full-image="${imageUrl}"
+          alt=""
+        >`
         :
         ""
       );
@@ -1126,13 +1568,10 @@ function renderCommerces(){
         "click",
         async()=>{
 
-          const confirmed=
-          window.confirm(
-            `Supprimer seulement le point de ${place.student_name} ?`
-          );
-
           if(
-            !confirmed
+            !window.confirm(
+              `Supprimer seulement le travail de ${place.student_name} ?`
+            )
           ){
             return;
           }
@@ -1159,6 +1598,7 @@ function renderCommerces(){
             state=data;
 
             renderCommerces();
+            renderAllStudentMarkers();
 
           }
           catch(error){
@@ -1174,8 +1614,7 @@ function renderCommerces(){
         }
       );
 
-      card
-      .appendChild(
+      card.appendChild(
         deleteButton
       );
 
@@ -1200,7 +1639,7 @@ function renderCommerces(){
 }
 
 
-/* CHOIX POINT A1/A2 */
+/* POINT A1/A2 */
 
 $("placeAButton")
 .addEventListener(
@@ -1228,24 +1667,19 @@ mapA.on(
 
     $("cLat")
     .value=
-    event
-    .latlng
-    .lat
+    event.latlng.lat
     .toFixed(6);
 
     $("cLng")
     .value=
-    event
-    .latlng
-    .lng
+    event.latlng.lng
     .toFixed(6);
 
     if(
       cPending
     ){
 
-      mapA
-      .removeLayer(
+      mapA.removeLayer(
         cPending
       );
 
@@ -1263,34 +1697,25 @@ mapA.on(
       event.latlng,
       {
         icon:
-        studentIcon(
-          name,
-          $("cNiveau").value
-        )
+          studentIcon(
+            name,
+            $("cNiveau").value
+          )
       }
     )
-    .addTo(
-      mapA
-    )
-    .bindPopup(
-      `<strong>${
-        esc(name)
-      }</strong><br>
-      Point choisi`
-    )
-    .openPopup();
+    .addTo(mapA);
 
     placingA=false;
 
     $("aPointStatus")
     .textContent=
-    "✓ Point choisi. Complète la fiche puis enregistre.";
+    "✓ Point choisi.";
 
   }
 );
 
 
-/* ENREGISTREMENT A1/A2 */
+/* ENVOI A1/A2 AVEC PHOTO */
 
 $("commerceForm")
 .addEventListener(
@@ -1310,13 +1735,9 @@ $("commerceForm")
     );
 
     if(
-      !Number.isFinite(
-        latitude
-      )
+      !Number.isFinite(latitude)
       ||
-      !Number.isFinite(
-        longitude
-      )
+      !Number.isFinite(longitude)
     ){
 
       $("commerceStatus")
@@ -1327,61 +1748,89 @@ $("commerceForm")
 
     }
 
-    $("commerceStatus")
-    .textContent=
-    "Enregistrement…";
+    const formData=
+    new FormData();
+
+    formData.append(
+      "student_name",
+      $("cEleve")
+      .value
+      .trim()
+    );
+
+    formData.append(
+      "level",
+      $("cNiveau").value
+    );
+
+    formData.append(
+      "place_name",
+      $("cNom")
+      .value
+      .trim()
+    );
+
+    formData.append(
+      "category",
+      $("cType").value
+    );
+
+    formData.append(
+      "recommendation",
+      $("cPourquoi")
+      .value
+      .trim()
+    );
+
+    formData.append(
+      "directions",
+      $("cImperatif")
+      .value
+      .trim()
+    );
+
+    formData.append(
+      "latitude",
+      String(latitude)
+    );
+
+    formData.append(
+      "longitude",
+      String(longitude)
+    );
+
+    const image=
+    $("cImage")
+    .files[0];
+
+    if(
+      image
+    ){
+
+      formData.append(
+        "image",
+        image,
+        image.name
+        ||
+        "image.jpg"
+      );
+
+    }
 
     try{
+
+      $("commerceStatus")
+      .textContent=
+      "Enregistrement…";
 
       await api(
         "commerce",
         {
-
           method:
             "POST",
 
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
           body:
-          JSON.stringify({
-
-            student_name:
-              $("cEleve")
-              .value
-              .trim(),
-
-            level:
-              $("cNiveau")
-              .value,
-
-            place_name:
-              $("cNom")
-              .value
-              .trim(),
-
-            category:
-              $("cType")
-              .value,
-
-            recommendation:
-              $("cPourquoi")
-              .value
-              .trim(),
-
-            directions:
-              $("cImperatif")
-              .value
-              .trim(),
-
-            latitude,
-
-            longitude
-
-          })
-
+            formData
         }
       );
 
@@ -1389,8 +1838,7 @@ $("commerceForm")
         cPending
       ){
 
-        mapA
-        .removeLayer(
+        mapA.removeLayer(
           cPending
         );
 
@@ -1400,14 +1848,11 @@ $("commerceForm")
 
       $("cLat").value="";
       $("cLng").value="";
-
-      $("aPointStatus")
-      .textContent=
-      "Clique sur « Placer mon point », puis touche la carte.";
+      $("cImage").value="";
 
       $("commerceStatus")
       .textContent=
-      "✓ Enregistré dans la base.";
+      "✓ Enregistré.";
 
       const data=
       await api(
@@ -1417,6 +1862,7 @@ $("commerceForm")
       state=data;
 
       renderCommerces();
+      renderAllStudentMarkers();
 
     }
     catch(error){
@@ -1451,8 +1897,7 @@ function renderSteps(){
     routeLine
   ){
 
-    mapB
-    .removeLayer(
+    mapB.removeLayer(
       routeLine
     );
 
@@ -1473,8 +1918,7 @@ function renderSteps(){
     (step,index)=>{
 
       const option=
-      document
-      .createElement(
+      document.createElement(
         "option"
       );
 
@@ -1490,8 +1934,7 @@ function renderSteps(){
       );
 
       const card=
-      document
-      .createElement(
+      document.createElement(
         "div"
       );
 
@@ -1517,7 +1960,7 @@ function renderSteps(){
         esc(
           step.address
           ||
-          "Adresse à compléter"
+          ""
         )
       }</div>`;
 
@@ -1526,8 +1969,7 @@ function renderSteps(){
         "click",
         ()=>{
 
-          $("bStep")
-          .value=
+          $("bStep").value=
           step.id;
 
           selectStep(
@@ -1559,13 +2001,9 @@ function renderSteps(){
         );
 
         if(
-          Number.isFinite(
-            latitude
-          )
+          Number.isFinite(latitude)
           &&
-          Number.isFinite(
-            longitude
-          )
+          Number.isFinite(longitude)
         ){
 
           const marker=
@@ -1578,36 +2016,17 @@ function renderSteps(){
               radius:6,
               color:"#245bd8",
               weight:2,
-              fillColor:"#ffffff",
+              fillColor:"#fff",
               fillOpacity:1
             }
           )
-          .addTo(
-            mapB
-          )
-          .bindPopup(
-            `<strong>${
-              index+1
-            }. ${
-              esc(
-                step.name
-              )
-            }</strong><br>${
-              esc(
-                step.address
-                ||
-                ""
-              )
-            }`
-          );
+          .addTo(mapB);
 
-          routeMarkers
-          .push(
+          routeMarkers.push(
             marker
           );
 
-          coordinates
-          .push(
+          coordinates.push(
             [
               latitude,
               longitude
@@ -1635,9 +2054,7 @@ function renderSteps(){
         dashArray:"6,6"
       }
     )
-    .addTo(
-      mapB
-    );
+    .addTo(mapB);
 
   }
 
@@ -1686,8 +2103,7 @@ $("fitRoute")
   "click",
   ()=>{
 
-    mapB
-    .fitBounds(
+    mapB.fitBounds(
       [
         FLORES,
         DEVOTO
@@ -1704,7 +2120,7 @@ $("fitRoute")
 );
 
 
-/* POINT PERSONNEL B1 */
+/* POINT B1 */
 
 $("placeBButton")
 .addEventListener(
@@ -1730,26 +2146,19 @@ mapB.on(
       return;
     }
 
-    $("bLat")
-    .value=
-    event
-    .latlng
-    .lat
+    $("bLat").value=
+    event.latlng.lat
     .toFixed(6);
 
-    $("bLng")
-    .value=
-    event
-    .latlng
-    .lng
+    $("bLng").value=
+    event.latlng.lng
     .toFixed(6);
 
     if(
       bPending
     ){
 
-      mapB
-      .removeLayer(
+      mapB.removeLayer(
         bPending
       );
 
@@ -1767,34 +2176,25 @@ mapB.on(
       event.latlng,
       {
         icon:
-        studentIcon(
-          name,
-          "B1"
-        )
+          studentIcon(
+            name,
+            "B1"
+          )
       }
     )
-    .addTo(
-      mapB
-    )
-    .bindPopup(
-      `<strong>${
-        esc(name)
-      } — B1</strong><br>
-      Point personnel choisi`
-    )
-    .openPopup();
+    .addTo(mapB);
 
     placingB=false;
 
     $("bPointStatus")
     .textContent=
-    "✓ Point choisi. L'audio peut maintenant être enregistré.";
+    "✓ Point choisi.";
 
   }
 );
 
 
-/* AUDIO - CONSERVÉ */
+/* AUDIO B1 : CONSERVÉ */
 
 let mediaRecorder=null;
 let chunks=[];
@@ -1811,15 +2211,10 @@ function supportedMime(){
   }
 
   const types=[
-
     "audio/webm;codecs=opus",
-
     "audio/webm",
-
     "audio/mp4",
-
     "audio/ogg;codecs=opus"
-
   ];
 
   return (
@@ -1850,7 +2245,7 @@ $("recordBtn")
 
       $("recordState")
       .textContent=
-      "Ce navigateur ne permet pas l'enregistrement direct. Utilisez le fichier audio.";
+      "Ce navigateur ne permet pas l'enregistrement direct.";
 
       return;
 
@@ -1944,17 +2339,14 @@ $("recordBtn")
 
       };
 
-      mediaRecorder
-      .start(
+      mediaRecorder.start(
         250
       );
 
-      $("recordBtn")
-      .disabled=
+      $("recordBtn").disabled=
       true;
 
-      $("stopBtn")
-      .disabled=
+      $("stopBtn").disabled=
       false;
 
       $("recordState")
@@ -1964,21 +2356,12 @@ $("recordBtn")
     }
     catch(error){
 
-      console.error(
-        "Erreur microphone complète:",
-        error
-      );
-
       $("recordState")
       .textContent=
       `Micro : ${
-        error.name
-        ||
-        "Erreur"
+        error.name||"Erreur"
       } — ${
-        error.message
-        ||
-        "indisponible"
+        error.message||""
       }`;
 
     }
@@ -2001,12 +2384,10 @@ $("stopBtn")
 
     }
 
-    $("recordBtn")
-    .disabled=
+    $("recordBtn").disabled=
     false;
 
-    $("stopBtn")
-    .disabled=
+    $("stopBtn").disabled=
     true;
 
   }
@@ -2031,13 +2412,9 @@ function updatePoster(){
   .value
   .trim()
   ||
-  (
-    step
-    ?
-    step.name
-    :
-    "Choisissez une étape"
-  );
+  step?.name
+  ||
+  "Choisissez une étape";
 
   const text=
   $("bAppreciation")
@@ -2071,9 +2448,12 @@ function updatePoster(){
   (
     previewImageUrl
     ?
-    `<img src="${
-      previewImageUrl
-    }" alt="">`
+    `<img
+      src="${previewImageUrl}"
+      class="thumb"
+      data-full-image="${previewImageUrl}"
+      alt=""
+    >`
     :
     ""
   )
@@ -2138,8 +2518,7 @@ $("bImage")
       previewImageUrl
     ){
 
-      URL
-      .revokeObjectURL(
+      URL.revokeObjectURL(
         previewImageUrl
       );
 
@@ -2164,7 +2543,7 @@ $("bImage")
 );
 
 
-/* ENREGISTREMENT B1 */
+/* ENVOI B1 */
 
 $("audioForm")
 .addEventListener(
@@ -2191,93 +2570,72 @@ $("audioForm")
 
     }
 
-    const latitudeRaw=
-    $("bLat").value;
-
-    const longitudeRaw=
-    $("bLng").value;
-
     if(
-      !latitudeRaw
+      !$("bLat").value
       ||
-      !longitudeRaw
+      !$("bLng").value
     ){
 
       $("b1Status")
       .textContent=
-      "Place d'abord le point personnel de l'élève sur la carte.";
+      "Place d'abord le point de l'élève sur la carte.";
 
       return;
 
     }
 
-    $("b1Status")
-    .textContent=
-    "Envoi de l'audio et enregistrement…";
-
     const formData=
     new FormData();
 
-    formData
-    .append(
+    formData.append(
       "student_name",
       $("bEleve")
       .value
       .trim()
     );
 
-    formData
-    .append(
+    formData.append(
       "step_id",
       $("bStep").value
     );
 
-    formData
-    .append(
+    formData.append(
       "title",
       $("bTitre")
       .value
       .trim()
     );
 
-    formData
-    .append(
+    formData.append(
       "appreciation",
       $("bAppreciation")
       .value
       .trim()
     );
 
-    formData
-    .append(
+    formData.append(
       "latitude",
-      latitudeRaw
+      $("bLat").value
     );
 
-    formData
-    .append(
+    formData.append(
       "longitude",
-      longitudeRaw
+      $("bLng").value
     );
 
-    formData
-    .append(
+    formData.append(
       "audio",
       audio,
       "audio."
       +
       (
         (audio.type||"")
-        .includes(
-          "mp4"
-        )
+        .includes("mp4")
         ?
         "m4a"
         :
         (audio.type||"")
-        .includes(
-          "ogg"
-        )
+        .includes("ogg")
         ?
         "ogg"
         :
@@ -2293,8 +2651,7 @@ $("audioForm")
       image
     ){
 
-      formData
-      .append(
+      formData.append(
         "image",
         image,
         image.name
@@ -2306,11 +2663,16 @@ $("audioForm")
 
     try{
 
+      $("b1Status")
+      .textContent=
+      "Enregistrement…";
+
       await api(
         "b1",
         {
           method:
             "POST",
+
           body:
             formData
         }
@@ -2318,30 +2680,21 @@ $("audioForm")
 
       recordedBlob=null;
 
-      $("previewAudio")
-      .hidden=
+      $("previewAudio").hidden=
       true;
 
       $("previewAudio")
-      .removeAttribute(
-        "src"
-      );
+      .removeAttribute("src");
 
-      $("bAudioFile")
-      .value="";
-
-      $("bLat")
-      .value="";
-
-      $("bLng")
-      .value="";
+      $("bAudioFile").value="";
+      $("bLat").value="";
+      $("bLng").value="";
 
       if(
         bPending
       ){
 
-        mapB
-        .removeLayer(
+        mapB.removeLayer(
           bPending
         );
 
@@ -2349,13 +2702,9 @@ $("audioForm")
 
       }
 
-      $("bPointStatus")
-      .textContent=
-      "Clique sur « Placer mon point », puis touche la carte B1.";
-
       $("b1Status")
       .textContent=
-      "✓ Témoignage enregistré en ligne.";
+      "✓ Témoignage enregistré.";
 
       const data=
       await api(
@@ -2365,6 +2714,7 @@ $("audioForm")
       state=data;
 
       renderB1();
+      renderAllStudentMarkers();
 
     }
     catch(error){
@@ -2385,16 +2735,6 @@ $("audioForm")
 
 function renderB1(){
 
-  bMarkers
-  .forEach(
-    marker=>
-    mapB.removeLayer(
-      marker
-    )
-  );
-
-  bMarkers=[];
-
   $("recordingList")
   .innerHTML="";
 
@@ -2408,89 +2748,6 @@ function renderB1(){
         item.id===
         contribution.step_id
       );
-
-      const latitude=
-      contribution.latitude;
-
-      const longitude=
-      contribution.longitude;
-
-      if(
-        latitude!==null
-        &&
-        latitude!==undefined
-        &&
-        longitude!==null
-        &&
-        longitude!==undefined
-      ){
-
-        const lat=
-        Number(
-          latitude
-        );
-
-        const lng=
-        Number(
-          longitude
-        );
-
-        if(
-          Number.isFinite(
-            lat
-          )
-          &&
-          Number.isFinite(
-            lng
-          )
-        ){
-
-          const marker=
-          L.marker(
-            [
-              lat,
-              lng
-            ],
-            {
-              icon:
-              studentIcon(
-                contribution.student_name,
-                "B1"
-              )
-            }
-          )
-          .addTo(
-            mapB
-          )
-          .bindPopup(
-            `<strong>${
-              esc(
-                contribution.student_name
-              )
-            } — B1</strong><br>${
-              esc(
-                contribution.appreciation
-              )
-            }`
-          );
-
-          bMarkers
-          .push(
-            marker
-          );
-
-        }
-
-      }
-
-      const card=
-      document
-      .createElement(
-        "div"
-      );
-
-      card.className=
-      "recording";
 
       const audioUrl=
       contribution.audio_key
@@ -2518,6 +2775,14 @@ function renderB1(){
       :
       "";
 
+      const card=
+      document.createElement(
+        "div"
+      );
+
+      card.className=
+      "recording";
+
       card.innerHTML=
 
       `<div class="poster">`
@@ -2543,9 +2808,12 @@ function renderB1(){
       (
         imageUrl
         ?
-        `<img src="${
-          imageUrl
-        }" alt="">`
+        `<img
+          src="${imageUrl}"
+          class="thumb"
+          data-full-image="${imageUrl}"
+          alt=""
+        >`
         :
         ""
       )
@@ -2555,7 +2823,7 @@ function renderB1(){
       `<div class="quote">
       « ${
         esc(
-          contribution.appreciation
+          contribution.appreciation||""
         )
       } »
       </div>`
@@ -2570,12 +2838,16 @@ function renderB1(){
         esc(
           contribution.student_name
         )
-      } • ${
-        esc(
-          step?.name
-          ||
-          "circuit papal"
-        )
+      }${
+        step
+        ?
+        ` • ${
+          esc(
+            step.name
+          )
+        }`
+        :
+        ""
       }</div>`
 
       +
@@ -2588,19 +2860,16 @@ function renderB1(){
         audioUrl
         ?
         `<audio
-        controls
-        preload="metadata"
-        src="${
-          audioUrl
-        }">
+          controls
+          preload="metadata"
+          src="${audioUrl}">
         </audio>`
         :
         ""
       );
 
       const deleteButton=
-      document
-      .createElement(
+      document.createElement(
         "button"
       );
 
@@ -2621,13 +2890,10 @@ function renderB1(){
         "click",
         async()=>{
 
-          const confirmed=
-          window.confirm(
-            `Supprimer uniquement le témoignage de ${contribution.student_name} ?`
-          );
-
           if(
-            !confirmed
+            !window.confirm(
+              `Supprimer uniquement le témoignage de ${contribution.student_name} ?`
+            )
           ){
             return;
           }
@@ -2654,6 +2920,7 @@ function renderB1(){
             state=data;
 
             renderB1();
+            renderAllStudentMarkers();
 
           }
           catch(error){
@@ -2669,8 +2936,7 @@ function renderB1(){
         }
       );
 
-      card
-      .appendChild(
+      card.appendChild(
         deleteButton
       );
 
