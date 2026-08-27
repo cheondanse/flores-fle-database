@@ -45,58 +45,150 @@ textarea{min-height:78px;resize:vertical}button{border:0;border-radius:10px;padd
 <div class="card">
 <h2>A1 / A2 — ajouter un lieu</h2>
 <p class="hint">Chaque élève place son point sur la carte. Le travail est enregistré en ligne et réapparaît sur les autres appareils.</p>
+<div class="toolbar">
+<button id="placeAButton" class="secondary" type="button">📍 Placer mon point sur la carte</button>
+</div>
+<div id="aPointStatus" class="status">Clique sur « Placer mon point », puis touche/click la carte.</div>
+
 <form id="commerceForm">
 <input id="cLat" type="hidden"><input id="cLng" type="hidden">
-<div class="two"><div><label>Prénom / groupe</label><input id="cEleve" required placeholder="Ex. Sofia"></div><div><label>Niveau</label><select id="cNiveau"><option>A1</option><option>A2</option></select></div></div>
-<label>Nom du commerce ou du lieu</label><input id="cNom" required placeholder="Ex. une boulangerie">
-<label>Catégorie</label><select id="cType"><option>Boulangerie</option><option>Café</option><option>Restaurant</option><option>Librairie</option><option>Marché</option><option>Vêtements</option><option>Service</option><option>Autre</option></select>
-<label>Pourquoi le recommandes-tu ?</label><textarea id="cPourquoi" required placeholder="J'aime ce lieu parce que… / Je le recommande parce que…"></textarea>
-<label>Pour y aller…</label><input id="cImperatif" placeholder="Continuez tout droit. Tournez à gauche…">
+<div class="two">
+<div>
+<label>Prénom / groupe</label>
+<input id="cEleve" required placeholder="Ex. Sofia">
+</div>
+<div>
+<label>Niveau</label>
+<select id="cNiveau"><option>A1</option><option>A2</option></select>
+</div>
+</div>
+
+<label>Nom du commerce ou du lieu</label>
+<input id="cNom" required placeholder="Ex. une boulangerie">
+
+<label>Catégorie</label>
+<select id="cType">
+<option>Boulangerie</option>
+<option>Café</option>
+<option>Restaurant</option>
+<option>Librairie</option>
+<option>Marché</option>
+<option>Vêtements</option>
+<option>Service</option>
+<option>Autre</option>
+</select>
+
+<label>Pourquoi le recommandes-tu ?</label>
+<textarea id="cPourquoi" required placeholder="J'aime ce lieu parce que… / Je le recommande parce que…"></textarea>
+
+<label>Pour y aller…</label>
+<input id="cImperatif" placeholder="Continuez tout droit. Tournez à gauche…">
+
 <button class="primary" type="submit" style="width:100%;margin-top:12px">➕ Enregistrer mon point</button>
 </form>
+
 <div id="commerceStatus" class="status"></div>
-<div class="routeBox"><strong>Itinéraire A1/A2</strong><div id="commerceRoute" class="small">Chargement…</div></div>
+
+<div class="routeBox">
+<strong>Itinéraire A1/A2</strong>
+<div id="commerceRoute" class="small">Chargement…</div>
 </div>
-<div class="card"><h3>Points des élèves</h3><div id="commerceList" class="small">Chargement…</div></div>
+</div>
+
+<div class="card">
+<h3>Points des élèves</h3>
+<div id="commerceList" class="small">Chargement…</div>
+</div>
 </aside>
-<section><div id="mapA"></div></section>
+
+<section>
+<div id="mapA"></div>
+</section>
 </div>
 </section>
 
 <section id="b1" class="panel">
 <div class="layout">
 <aside class="stack">
+
 <div class="card">
 <h2>B1 — étapes du circuit papal</h2>
 <p class="hint">Les étapes sont enregistrées dans la base et pourront être corrigées ou réordonnées ensuite.</p>
 <div id="papalSteps"></div>
-<div class="toolbar"><button id="fitRoute" class="secondary" type="button">🗺️ Voir Flores → Devoto</button></div>
+<div class="toolbar">
+<button id="fitRoute" class="secondary" type="button">🗺️ Voir Flores → Devoto</button>
+</div>
 </div>
 
 <div class="card">
 <h2>Créer l'audio d'un élève</h2>
 <div class="micBox">Le micro fonctionne indépendamment de la base. Après « Ajouter à la galerie », l'audio et la photo sont envoyés dans le stockage Netlify et restent disponibles sur les autres appareils.</div>
+
 <form id="audioForm">
-<div class="two"><div><label>Prénom</label><input id="bEleve" required placeholder="Ex. Mateo"></div><div><label>Étape</label><select id="bStep"></select></div></div>
-<label>Titre de la petite affiche</label><input id="bTitre" placeholder="Ex. Un lieu de son enfance">
-<label>Mon appréciation</label><textarea id="bAppreciation" required placeholder="Je trouve ce lieu intéressant parce que…"></textarea>
-<label>Photo pour l'affiche (facultatif)</label><input id="bImage" type="file" accept="image/*">
+<input id="bLat" type="hidden"><input id="bLng" type="hidden">
+
+<div class="toolbar">
+<button id="placeBButton" class="secondary" type="button">📍 Placer le point de cet élève</button>
+</div>
+<div id="bPointStatus" class="status">Clique sur « Placer le point », puis touche/click la carte B1.</div>
+
+<div class="two">
+<div>
+<label>Prénom</label>
+<input id="bEleve" required placeholder="Ex. Mateo">
+</div>
+<div>
+<label>Étape</label>
+<select id="bStep"></select>
+</div>
+</div>
+
+<label>Titre de la petite affiche</label>
+<input id="bTitre" placeholder="Ex. Un lieu de son enfance">
+
+<label>Mon appréciation</label>
+<textarea id="bAppreciation" required placeholder="Je trouve ce lieu intéressant parce que…"></textarea>
+
+<label>Photo pour l'affiche (facultatif)</label>
+<input id="bImage" type="file" accept="image/*">
+
 <label>Enregistrement</label>
-<div class="toolbar"><button id="recordBtn" class="good" type="button">🎙️ Enregistrer</button><button id="stopBtn" class="danger" type="button" disabled>⏹ Arrêter</button></div>
+<div class="toolbar">
+<button id="recordBtn" class="good" type="button">🎙️ Enregistrer</button>
+<button id="stopBtn" class="danger" type="button" disabled>⏹ Arrêter</button>
+</div>
+
 <div id="recordState" class="status"></div>
 <audio id="previewAudio" controls hidden></audio>
-<label>Ou joindre un fichier audio</label><input id="bAudioFile" type="file" accept="audio/*">
+
+<label>Ou joindre un fichier audio</label>
+<input id="bAudioFile" type="file" accept="audio/*">
+
 <button class="primary" type="submit" style="width:100%;margin-top:12px">💾 Ajouter à la galerie</button>
 </form>
+
 <div id="b1Status" class="status"></div>
 </div>
 
-<div class="card"><h3>Aperçu de l'affiche</h3><div id="posterPreview" class="poster"><div><div class="title">Choisissez une étape</div><div class="quote">« Votre appréciation apparaîtra ici. »</div></div><div class="by">Témoignage B1</div></div></div>
+<div class="card">
+<h3>Aperçu de l'affiche</h3>
+<div id="posterPreview" class="poster">
+<div>
+<div class="title">Choisissez une étape</div>
+<div class="quote">« Votre appréciation apparaîtra ici. »</div>
+</div>
+<div class="by">Témoignage B1</div>
+</div>
+</div>
+
 </aside>
 
 <section class="stack">
 <div id="mapB"></div>
-<div class="card"><h2>🎧 Galerie B1</h2><div id="recordingList"></div></div>
+<div class="card">
+<h2>🎧 Galerie B1</h2>
+<div id="recordingList"></div>
+</div>
 </section>
 </div>
 </section>
@@ -110,17 +202,41 @@ const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const FLORES=[-34.6297,-58.4631], DEVOTO=[-34.6007,-58.5135];
 
-document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));b.classList.add("active");$(b.dataset.target).classList.add("active");setTimeout(()=>{mapA.invalidateSize();mapB.invalidateSize()},60)}));
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  $(b.dataset.target).classList.add("active");
+  setTimeout(()=>{mapA.invalidateSize();mapB.invalidateSize()},60);
+}));
 
 const mapA=L.map("mapA").setView([-34.615,-58.487],13);
 const mapB=L.map("mapB").setView([-34.615,-58.487],13);
-[mapA,mapB].forEach(m=>L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"&copy; OpenStreetMap contributors"}).addTo(m));
 
-function initials(name){return (name||"?").trim().split(/\s+/).slice(0,2).map(s=>s[0]?.toUpperCase()||"").join("")||"?"}
-function studentIcon(name,level){return L.divIcon({className:"",html:`<div class="student-marker ${level==="B1"?"b1":""}">${esc(initials(name))}</div>`,iconSize:[32,32],iconAnchor:[16,16]})}
+[mapA,mapB].forEach(m=>
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    maxZoom:19,
+    attribution:"&copy; OpenStreetMap contributors"
+  }).addTo(m)
+);
+
+function initials(name){
+  return (name||"?").trim().split(/\s+/).slice(0,2).map(s=>s[0]?.toUpperCase()||"").join("")||"?";
+}
+
+function studentIcon(name,level){
+  return L.divIcon({
+    className:"",
+    html:`<div class="student-marker ${level==="B1"?"b1":""}">${esc(initials(name))}</div>`,
+    iconSize:[32,32],
+    iconAnchor:[16,16]
+  });
+}
 
 let state={commerces:[],steps:[],b1:[]};
-let cMarkers=[],cLine=null,cPending=null,bMarkers=[],routeMarkers=[],routeLine=null;
+let cMarkers=[],cLine=null,cPending=null;
+let bMarkers=[],routeMarkers=[],routeLine=null,bPending=null;
+let placingA=false,placingB=false;
 
 async function api(action,options={}){
   const url=`${API}?action=${encodeURIComponent(action)}`;
@@ -129,13 +245,16 @@ async function api(action,options={}){
   if(!r.ok) throw new Error(data.error||`Erreur HTTP ${r.status}`);
   return data;
 }
+
 async function loadAll(){
   try{
     const data=await api("state");
     state=data;
     $("dbState").textContent="✓ Base Netlify connectée — données partagées entre appareils";
     $("dbState").className="online";
-    renderCommerces(); renderSteps(); renderB1();
+    renderCommerces();
+    renderSteps();
+    renderB1();
   }catch(e){
     $("dbState").textContent="⚠ Connexion à la base impossible : "+e.message;
     $("dbState").className="online offline";
@@ -144,145 +263,563 @@ async function loadAll(){
   }
 }
 
-// A1/A2
 function renderCommerces(){
-  cMarkers.forEach(m=>mapA.removeLayer(m));cMarkers=[];
-  if(cLine){mapA.removeLayer(cLine);cLine=null}
+  cMarkers.forEach(m=>mapA.removeLayer(m));
+  cMarkers=[];
+
+  if(cLine){
+    mapA.removeLayer(cLine);
+    cLine=null;
+  }
+
   $("commerceList").innerHTML="";
   const coords=[];
+
   state.commerces.forEach((p,i)=>{
-    const m=L.marker([Number(p.latitude),Number(p.longitude)],{icon:studentIcon(p.student_name,p.level)}).addTo(mapA)
-      .bindPopup(`<strong>${esc(p.student_name)} — ${esc(p.level)}</strong><br>${esc(p.place_name)}<br>${esc(p.recommendation)}`);
-    cMarkers.push(m);coords.push([Number(p.latitude),Number(p.longitude)]);
-    const d=document.createElement("div");d.className="entry";
-    d.innerHTML=`<strong>${i+1}. ${esc(p.student_name)} — ${esc(p.place_name)}</strong><div><span class="badge">${esc(p.level)}</span><span class="badge">${esc(p.category)}</span></div><div>${esc(p.recommendation)}</div>${p.directions?`<div class="small">➡ ${esc(p.directions)}</div>`:""}`;
+    const m=L.marker(
+      [Number(p.latitude),Number(p.longitude)],
+      {icon:studentIcon(p.student_name,p.level)}
+    ).addTo(mapA)
+    .bindPopup(
+      `<strong>${esc(p.student_name)} — ${esc(p.level)}</strong><br>`+
+      `${esc(p.place_name)}<br>${esc(p.recommendation)}`
+    );
+
+    cMarkers.push(m);
+    coords.push([Number(p.latitude),Number(p.longitude)]);
+
+    const d=document.createElement("div");
+    d.className="entry";
+    d.innerHTML=
+      `<strong>${i+1}. ${esc(p.student_name)} — ${esc(p.place_name)}</strong>`+
+      `<div><span class="badge">${esc(p.level)}</span><span class="badge">${esc(p.category)}</span></div>`+
+      `<div>${esc(p.recommendation)}</div>`+
+      (p.directions?`<div class="small">➡ ${esc(p.directions)}</div>`:"");
+
     $("commerceList").appendChild(d);
   });
-  if(!state.commerces.length)$("commerceList").textContent="Aucun point pour le moment.";
-  if(coords.length>1)cLine=L.polyline(coords,{weight:4,color:"#a65f13",opacity:.7}).addTo(mapA);
-  $("commerceRoute").textContent=state.commerces.length?state.commerces.map((p,i)=>`${i+1}. ${p.student_name}: ${p.place_name}`).join(" → "):"Aucun point ajouté.";
+
+  if(!state.commerces.length){
+    $("commerceList").textContent="Aucun point pour le moment.";
+  }
+
+  if(coords.length>1){
+    cLine=L.polyline(coords,{
+      weight:4,
+      color:"#a65f13",
+      opacity:.7
+    }).addTo(mapA);
+  }
+
+  $("commerceRoute").textContent=
+    state.commerces.length
+      ? state.commerces.map((p,i)=>`${i+1}. ${p.student_name}: ${p.place_name}`).join(" → ")
+      : "Aucun point ajouté.";
 }
-mapA.on("click",e=>{$("cLat").value=e.latlng.lat.toFixed(6);$("cLng").value=e.latlng.lng.toFixed(6);if(cPending)mapA.removeLayer(cPending);cPending=L.circleMarker(e.latlng,{radius:7,color:"#a65f13",fillOpacity:.25}).addTo(mapA);$("commerceStatus").textContent="✓ Point choisi."});
+
+$("placeAButton").addEventListener("click",()=>{
+  placingA=true;
+  $("aPointStatus").textContent="✓ Maintenant, touche/click l’endroit exact sur la carte A1/A2.";
+});
+
+mapA.on("click",e=>{
+  if(!placingA) return;
+
+  $("cLat").value=e.latlng.lat.toFixed(6);
+  $("cLng").value=e.latlng.lng.toFixed(6);
+
+  if(cPending){
+    mapA.removeLayer(cPending);
+  }
+
+  const name=$("cEleve").value.trim()||"A1/A2";
+
+  cPending=L.marker(
+    e.latlng,
+    {icon:studentIcon(name,$("cNiveau").value)}
+  ).addTo(mapA)
+   .bindPopup(`<strong>${esc(name)}</strong><br>Point choisi`)
+   .openPopup();
+
+  placingA=false;
+  $("aPointStatus").textContent="✓ Point choisi. Complète la fiche puis enregistre.";
+  $("commerceStatus").textContent="✓ Point choisi.";
+});
+
 $("commerceForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  const lat=Number($("cLat").value),lng=Number($("cLng").value);
-  if(!Number.isFinite(lat)||!Number.isFinite(lng)){ $("commerceStatus").textContent="Clique d'abord sur la carte.";return}
+
+  const lat=Number($("cLat").value);
+  const lng=Number($("cLng").value);
+
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)){
+    $("commerceStatus").textContent="Clique d'abord sur « Placer mon point », puis sur la carte.";
+    return;
+  }
+
   $("commerceStatus").textContent="Enregistrement…";
-  try{
-    await api("commerce",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-      student_name:$("cEleve").value.trim(),level:$("cNiveau").value,place_name:$("cNom").value.trim(),category:$("cType").value,
-      recommendation:$("cPourquoi").value.trim(),directions:$("cImperatif").value.trim(),latitude:lat,longitude:lng
-    })});
-    if(cPending){mapA.removeLayer(cPending);cPending=null}
-    $("cLat").value="";$("cLng").value="";
-    $("commerceStatus").textContent="✓ Enregistré dans la base.";
-    const data=await api("state");state=data;renderCommerces();
-  }catch(err){$("commerceStatus").textContent="Erreur : "+err.message}
-});
 
-// B1 route
-function renderSteps(){
-  routeMarkers.forEach(m=>mapB.removeLayer(m));routeMarkers=[];
-  if(routeLine){mapB.removeLayer(routeLine);routeLine=null}
-  $("papalSteps").innerHTML="";$("bStep").innerHTML="";
-  const coords=[];
-  state.steps.forEach((s,i)=>{
-    const o=document.createElement("option");o.value=s.id;o.textContent=`${i+1}. ${s.name}`;$("bStep").appendChild(o);
-    const d=document.createElement("div");d.className="step";d.dataset.id=s.id;
-    d.innerHTML=`<div class="stepTitle">${i+1}. ${esc(s.name)}</div><div class="small">${esc(s.address||"Adresse à compléter")}</div>`;
-    d.addEventListener("click",()=>{$("bStep").value=s.id;selectStep(s.id)});
-    $("papalSteps").appendChild(d);
-    if(s.latitude!==null&&s.longitude!==null){
-      const lat=Number(s.latitude),lng=Number(s.longitude);
-      const m=L.marker([lat,lng]).addTo(mapB).bindPopup(`<strong>${i+1}. ${esc(s.name)}</strong><br>${esc(s.address||"")}`);
-      routeMarkers.push(m);coords.push([lat,lng]);
+  try{
+    await api("commerce",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        student_name:$("cEleve").value.trim(),
+        level:$("cNiveau").value,
+        place_name:$("cNom").value.trim(),
+        category:$("cType").value,
+        recommendation:$("cPourquoi").value.trim(),
+        directions:$("cImperatif").value.trim(),
+        latitude:lat,
+        longitude:lng
+      })
+    });
+
+    if(cPending){
+      mapA.removeLayer(cPending);
+      cPending=null;
     }
-  });
-  if(coords.length>1)routeLine=L.polyline(coords,{weight:4,color:"#245bd8",opacity:.7,dashArray:"6,6"}).addTo(mapB);
-  if(state.steps.length)selectStep(state.steps[0].id);
-}
-function selectStep(id){
-  document.querySelectorAll(".step").forEach(x=>x.classList.toggle("active",x.dataset.id===id));
-  const s=state.steps.find(x=>x.id===id);
-  if(s&&s.latitude!==null&&s.longitude!==null)mapB.setView([Number(s.latitude),Number(s.longitude)],16);
-  updatePoster();
-}
-$("bStep").addEventListener("change",()=>selectStep($("bStep").value));
-$("fitRoute").addEventListener("click",()=>mapB.fitBounds([FLORES,DEVOTO],{padding:[25,25]}));
 
-// Audio
-let mediaRecorder=null,chunks=[],recordedBlob=null,stream=null,previewImageUrl="";
-function supportedMime(){if(!window.MediaRecorder)return"";const types=["audio/webm;codecs=opus","audio/webm","audio/mp4","audio/ogg;codecs=opus"];return types.find(t=>MediaRecorder.isTypeSupported?.(t))||""}
-$("recordBtn").addEventListener("click",async()=>{
-  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){$("recordState").textContent="Ce navigateur ne permet pas l'enregistrement direct. Utilisez le fichier audio.";return}
-  try{
-    stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    chunks=[];const mime=supportedMime();
-    mediaRecorder=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream);
-    mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
-    mediaRecorder.onstop=()=>{
-      recordedBlob=new Blob(chunks,{type:mediaRecorder.mimeType||mime||"audio/webm"});
-      $("previewAudio").src=URL.createObjectURL(recordedBlob);$("previewAudio").hidden=false;
-      $("recordState").textContent="✓ Audio enregistré.";
-      stream?.getTracks().forEach(t=>t.stop());stream=null;
-    };
-    mediaRecorder.start(250);$("recordBtn").disabled=true;$("stopBtn").disabled=false;
-    $("recordState").innerHTML='<span class="recordDot"></span>Enregistrement en cours…';
+    placingA=false;
+    $("aPointStatus").textContent="Clique sur « Placer mon point », puis touche/click la carte.";
+    $("cLat").value="";
+    $("cLng").value="";
+    $("commerceStatus").textContent="✓ Enregistré dans la base.";
+
+    const data=await api("state");
+    state=data;
+    renderCommerces();
+
   }catch(err){
-    console.error("Erreur microphone complète:",err);
-    $("recordState").textContent=`Micro : ${err.name||"Erreur"} — ${err.message||"indisponible"}`;
+    $("commerceStatus").textContent="Erreur : "+err.message;
   }
 });
-$("stopBtn").addEventListener("click",()=>{if(mediaRecorder&&mediaRecorder.state!=="inactive")mediaRecorder.stop();$("recordBtn").disabled=false;$("stopBtn").disabled=true});
+
+function renderSteps(){
+  routeMarkers.forEach(m=>mapB.removeLayer(m));
+  routeMarkers=[];
+
+  if(routeLine){
+    mapB.removeLayer(routeLine);
+    routeLine=null;
+  }
+
+  $("papalSteps").innerHTML="";
+  $("bStep").innerHTML="";
+
+  const coords=[];
+
+  state.steps.forEach((s,i)=>{
+    const o=document.createElement("option");
+    o.value=s.id;
+    o.textContent=`${i+1}. ${s.name}`;
+    $("bStep").appendChild(o);
+
+    const d=document.createElement("div");
+    d.className="step";
+    d.dataset.id=s.id;
+    d.innerHTML=
+      `<div class="stepTitle">${i+1}. ${esc(s.name)}</div>`+
+      `<div class="small">${esc(s.address||"Adresse à compléter")}</div>`;
+
+    d.addEventListener("click",()=>{
+      $("bStep").value=s.id;
+      selectStep(s.id);
+    });
+
+    $("papalSteps").appendChild(d);
+
+    if(s.latitude!==null&&s.longitude!==null){
+      const lat=Number(s.latitude);
+      const lng=Number(s.longitude);
+
+      const m=L.marker([lat,lng])
+        .addTo(mapB)
+        .bindPopup(
+          `<strong>${i+1}. ${esc(s.name)}</strong><br>${esc(s.address||"")}`
+        );
+
+      routeMarkers.push(m);
+      coords.push([lat,lng]);
+    }
+  });
+
+  if(coords.length>1){
+    routeLine=L.polyline(coords,{
+      weight:4,
+      color:"#245bd8",
+      opacity:.7,
+      dashArray:"6,6"
+    }).addTo(mapB);
+  }
+
+  if(state.steps.length){
+    selectStep(state.steps[0].id);
+  }
+}
+
+function selectStep(id){
+  document.querySelectorAll(".step").forEach(x=>
+    x.classList.toggle("active",x.dataset.id===id)
+  );
+
+  const s=state.steps.find(x=>x.id===id);
+
+  if(s&&s.latitude!==null&&s.longitude!==null){
+    mapB.setView([Number(s.latitude),Number(s.longitude)],16);
+  }
+
+  updatePoster();
+}
+
+$("bStep").addEventListener("change",()=>selectStep($("bStep").value));
+
+$("fitRoute").addEventListener("click",()=>
+  mapB.fitBounds([FLORES,DEVOTO],{padding:[25,25]})
+);
+
+$("placeBButton").addEventListener("click",()=>{
+  placingB=true;
+  $("bPointStatus").textContent="✓ Maintenant, touche/click l’endroit exact sur la carte B1.";
+});
+
+mapB.on("click",e=>{
+  if(!placingB) return;
+
+  $("bLat").value=e.latlng.lat.toFixed(6);
+  $("bLng").value=e.latlng.lng.toFixed(6);
+
+  if(bPending){
+    mapB.removeLayer(bPending);
+  }
+
+  const name=$("bEleve").value.trim()||"B1";
+
+  bPending=L.marker(
+    e.latlng,
+    {icon:studentIcon(name,"B1")}
+  ).addTo(mapB)
+   .bindPopup(`<strong>${esc(name)} — B1</strong><br>Point choisi pour le témoignage`)
+   .openPopup();
+
+  placingB=false;
+  $("bPointStatus").textContent="✓ Point choisi. Tu peux maintenant enregistrer l’audio.";
+});
+
+let mediaRecorder=null;
+let chunks=[];
+let recordedBlob=null;
+let stream=null;
+let previewImageUrl="";
+
+function supportedMime(){
+  if(!window.MediaRecorder) return "";
+
+  const types=[
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/ogg;codecs=opus"
+  ];
+
+  return types.find(t=>MediaRecorder.isTypeSupported?.(t))||"";
+}
+
+$("recordBtn").addEventListener("click",async()=>{
+  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){
+    $("recordState").textContent=
+      "Ce navigateur ne permet pas l'enregistrement direct. Utilisez le fichier audio.";
+    return;
+  }
+
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({audio:true});
+
+    chunks=[];
+    const mime=supportedMime();
+
+    mediaRecorder=mime
+      ? new MediaRecorder(stream,{mimeType:mime})
+      : new MediaRecorder(stream);
+
+    mediaRecorder.ondataavailable=e=>{
+      if(e.data&&e.data.size){
+        chunks.push(e.data);
+      }
+    };
+
+    mediaRecorder.onstop=()=>{
+      recordedBlob=new Blob(
+        chunks,
+        {type:mediaRecorder.mimeType||mime||"audio/webm"}
+      );
+
+      $("previewAudio").src=URL.createObjectURL(recordedBlob);
+      $("previewAudio").hidden=false;
+      $("recordState").textContent="✓ Audio enregistré.";
+
+      stream?.getTracks().forEach(t=>t.stop());
+      stream=null;
+    };
+
+    mediaRecorder.start(250);
+
+    $("recordBtn").disabled=true;
+    $("stopBtn").disabled=false;
+    $("recordState").innerHTML=
+      '<span class="recordDot"></span>Enregistrement en cours…';
+
+  }catch(err){
+    console.error("Erreur microphone complète:",err);
+
+    $("recordState").textContent=
+      `Micro : ${err.name||"Erreur"} — ${err.message||"indisponible"}`;
+  }
+});
+
+$("stopBtn").addEventListener("click",()=>{
+  if(mediaRecorder&&mediaRecorder.state!=="inactive"){
+    mediaRecorder.stop();
+  }
+
+  $("recordBtn").disabled=false;
+  $("stopBtn").disabled=true;
+});
 
 function updatePoster(){
-  const s=state.steps.find(x=>x.id===$("bStep").value)||state.steps[0];
-  const title=$("bTitre").value.trim()||(s?s.name:"Choisissez une étape");
-  const txt=$("bAppreciation").value.trim()||"Votre appréciation apparaîtra ici.";
-  const eleve=$("bEleve").value.trim()||"Témoignage B1";
-  $("posterPreview").innerHTML=`<div><div class="title">${esc(title)}</div>${previewImageUrl?`<img src="${previewImageUrl}" alt="">`:""}<div class="quote">« ${esc(txt)} »</div></div><div class="by">${esc(eleve)}${s?` • ${esc(s.name)}`:""}</div>`;
+  const s=
+    state.steps.find(x=>x.id===$("bStep").value)
+    || state.steps[0];
+
+  const title=
+    $("bTitre").value.trim()
+    || (s?s.name:"Choisissez une étape");
+
+  const txt=
+    $("bAppreciation").value.trim()
+    || "Votre appréciation apparaîtra ici.";
+
+  const eleve=
+    $("bEleve").value.trim()
+    || "Témoignage B1";
+
+  $("posterPreview").innerHTML=
+    `<div>`+
+      `<div class="title">${esc(title)}</div>`+
+      (previewImageUrl?`<img src="${previewImageUrl}" alt="">`:"")+
+      `<div class="quote">« ${esc(txt)} »</div>`+
+    `</div>`+
+    `<div class="by">${esc(eleve)}${s?` • ${esc(s.name)}`:""}</div>`;
 }
-["bTitre","bAppreciation","bEleve"].forEach(id=>$(id).addEventListener("input",updatePoster));
-$("bImage").addEventListener("change",()=>{if(previewImageUrl)URL.revokeObjectURL(previewImageUrl);const f=$("bImage").files[0];previewImageUrl=f?URL.createObjectURL(f):"";updatePoster()});
+
+["bTitre","bAppreciation","bEleve"].forEach(id=>
+  $(id).addEventListener("input",updatePoster)
+);
+
+$("bImage").addEventListener("change",()=>{
+  if(previewImageUrl){
+    URL.revokeObjectURL(previewImageUrl);
+  }
+
+  const f=$("bImage").files[0];
+  previewImageUrl=f?URL.createObjectURL(f):"";
+  updatePoster();
+});
 
 $("audioForm").addEventListener("submit",async e=>{
   e.preventDefault();
-  const audio=recordedBlob||$("bAudioFile").files[0];
-  if(!audio){$("b1Status").textContent="Enregistre ou joins d'abord un audio.";return}
-  $("b1Status").textContent="Envoi de l'audio et enregistrement…";
+
+  const audio=
+    recordedBlob
+    || $("bAudioFile").files[0];
+
+  if(!audio){
+    $("b1Status").textContent=
+      "Enregistre ou joins d'abord un audio.";
+    return;
+  }
+
+  const lat=Number($("bLat").value);
+  const lng=Number($("bLng").value);
+
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)){
+    $("b1Status").textContent=
+      "Place d’abord le point de l’élève sur la carte B1.";
+    return;
+  }
+
+  $("b1Status").textContent=
+    "Envoi de l'audio et enregistrement…";
+
   const fd=new FormData();
-  fd.append("student_name",$("bEleve").value.trim());
-  fd.append("step_id",$("bStep").value);
-  fd.append("title",$("bTitre").value.trim());
-  fd.append("appreciation",$("bAppreciation").value.trim());
-  fd.append("audio",audio,"audio."+((audio.type||"").includes("mp4")?"m4a":(audio.type||"").includes("ogg")?"ogg":"webm"));
-  const img=$("bImage").files[0];if(img)fd.append("image",img,img.name||"image.jpg");
+
+  fd.append(
+    "student_name",
+    $("bEleve").value.trim()
+  );
+
+  fd.append(
+    "step_id",
+    $("bStep").value
+  );
+
+  fd.append(
+    "title",
+    $("bTitre").value.trim()
+  );
+
+  fd.append(
+    "appreciation",
+    $("bAppreciation").value.trim()
+  );
+
+  fd.append(
+    "latitude",
+    String(lat)
+  );
+
+  fd.append(
+    "longitude",
+    String(lng)
+  );
+
+  fd.append(
+    "audio",
+    audio,
+    "audio."+
+    (
+      (audio.type||"").includes("mp4")
+        ?"m4a"
+        :(audio.type||"").includes("ogg")
+          ?"ogg"
+          :"webm"
+    )
+  );
+
+  const img=$("bImage").files[0];
+
+  if(img){
+    fd.append(
+      "image",
+      img,
+      img.name||"image.jpg"
+    );
+  }
+
   try{
-    await api("b1",{method:"POST",body:fd});
-    recordedBlob=null;$("previewAudio").hidden=true;$("previewAudio").removeAttribute("src");$("bAudioFile").value="";
-    $("b1Status").textContent="✓ Témoignage enregistré en ligne.";
-    const data=await api("state");state=data;renderB1();
-  }catch(err){$("b1Status").textContent="Erreur : "+err.message}
+    await api("b1",{
+      method:"POST",
+      body:fd
+    });
+
+    recordedBlob=null;
+
+    $("previewAudio").hidden=true;
+    $("previewAudio").removeAttribute("src");
+    $("bAudioFile").value="";
+
+    $("b1Status").textContent=
+      "✓ Témoignage et point enregistrés en ligne.";
+
+    $("bLat").value="";
+    $("bLng").value="";
+
+    if(bPending){
+      mapB.removeLayer(bPending);
+      bPending=null;
+    }
+
+    placingB=false;
+
+    $("bPointStatus").textContent=
+      "Clique sur « Placer le point », puis touche/click la carte B1.";
+
+    const data=await api("state");
+    state=data;
+    renderB1();
+
+  }catch(err){
+    $("b1Status").textContent=
+      "Erreur : "+err.message;
+  }
 });
 
 function renderB1(){
-  bMarkers.forEach(m=>mapB.removeLayer(m));bMarkers=[];
+  bMarkers.forEach(m=>mapB.removeLayer(m));
+  bMarkers=[];
+
   $("recordingList").innerHTML="";
+
   state.b1.forEach(r=>{
-    const s=state.steps.find(x=>x.id===r.step_id);
-    if(s&&s.latitude!==null&&s.longitude!==null){
-      const m=L.marker([Number(s.latitude),Number(s.longitude)],{icon:studentIcon(r.student_name,"B1")}).addTo(mapB)
-        .bindPopup(`<strong>${esc(r.student_name)} — B1</strong><br>${esc(s.name)}<br>${esc(r.appreciation)}`);
+    const s=
+      state.steps.find(x=>x.id===r.step_id);
+
+    const markerLat=
+      r.latitude!==null&&r.latitude!==undefined
+        ?Number(r.latitude)
+        :(s&&s.latitude!==null
+          ?Number(s.latitude)
+          :null);
+
+    const markerLng=
+      r.longitude!==null&&r.longitude!==undefined
+        ?Number(r.longitude)
+        :(s&&s.longitude!==null
+          ?Number(s.longitude)
+          :null);
+
+    if(
+      Number.isFinite(markerLat)
+      &&Number.isFinite(markerLng)
+    ){
+      const m=L.marker(
+        [markerLat,markerLng],
+        {icon:studentIcon(r.student_name,"B1")}
+      ).addTo(mapB)
+       .bindPopup(
+         `<strong>${esc(r.student_name)} — B1</strong><br>`+
+         `${esc(s?.name||"Point libre")}<br>`+
+         `${esc(r.appreciation)}`
+       );
+
       bMarkers.push(m);
     }
-    const d=document.createElement("div");d.className="recording";
-    const audioUrl=r.audio_key?`${API}?action=media&key=${encodeURIComponent(r.audio_key)}`:"";
-    const imageUrl=r.image_key?`${API}?action=media&key=${encodeURIComponent(r.image_key)}`:"";
-    d.innerHTML=`<div class="poster"><div><div class="title">${esc(r.title||s?.name||"Témoignage")}</div>${imageUrl?`<img src="${imageUrl}" alt="">`:""}<div class="quote">« ${esc(r.appreciation)} »</div></div><div class="by">${esc(r.student_name)} • ${esc(s?.name||"circuit papal")}</div></div>${audioUrl?`<audio controls preload="metadata" src="${audioUrl}"></audio>`:""}`;
+
+    const d=document.createElement("div");
+    d.className="recording";
+
+    const audioUrl=
+      r.audio_key
+        ?`${API}?action=media&key=${encodeURIComponent(r.audio_key)}`
+        :"";
+
+    const imageUrl=
+      r.image_key
+        ?`${API}?action=media&key=${encodeURIComponent(r.image_key)}`
+        :"";
+
+    d.innerHTML=
+      `<div class="poster">`+
+        `<div>`+
+          `<div class="title">${esc(r.title||s?.name||"Témoignage")}</div>`+
+          (imageUrl?`<img src="${imageUrl}" alt="">`:"")+
+          `<div class="quote">« ${esc(r.appreciation)} »</div>`+
+        `</div>`+
+        `<div class="by">${esc(r.student_name)} • ${esc(s?.name||"circuit papal")}</div>`+
+      `</div>`+
+      (audioUrl
+        ?`<audio controls preload="metadata" src="${audioUrl}"></audio>`
+        :"");
+
     $("recordingList").appendChild(d);
   });
-  if(!state.b1.length)$("recordingList").innerHTML='<p class="small">Aucun témoignage pour le moment.</p>';
+
+  if(!state.b1.length){
+    $("recordingList").innerHTML=
+      '<p class="small">Aucun témoignage pour le moment.</p>';
+  }
 }
+
 loadAll();
 })();
 </script>
