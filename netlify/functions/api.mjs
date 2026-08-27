@@ -73,6 +73,16 @@ async function ensureSchema() {
     )
   `);
 
+  await db.sql.unsafe(`
+    CREATE TABLE IF NOT EXISTS fle_student_place_media (
+      place_id TEXT PRIMARY KEY
+        REFERENCES fle_student_places(id) ON DELETE CASCADE,
+      image_key TEXT NOT NULL,
+      image_type TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
   const existing = await db.sql`
     SELECT COUNT(*)::int AS count
     FROM fle_papal_steps
@@ -109,11 +119,19 @@ async function deleteBlobQuietly(key) {
     await mediaStore.delete(key);
   } catch (error) {
     console.error(
-      "Impossible de supprimer le Blob",
+      "Suppression Blob impossible :",
       key,
       error
     );
   }
+}
+
+function isMultipart(req) {
+  return (
+    req.headers.get("content-type") || ""
+  )
+    .toLowerCase()
+    .includes("multipart/form-data");
 }
 
 export default async (req) => {
@@ -129,9 +147,14 @@ export default async (req) => {
       req.method === "GET"
     ) {
       const commerces = await db.sql`
-        SELECT *
-        FROM fle_student_places
-        ORDER BY route_order ASC, created_at ASC
+        SELECT
+          p.*,
+          m.image_key,
+          m.image_type
+        FROM fle_student_places AS p
+        LEFT JOIN fle_student_place_media AS m
+          ON m.place_id = p.id
+        ORDER BY p.route_order ASC, p.created_at ASC
       `;
 
       const steps = await db.sql`
@@ -163,22 +186,114 @@ export default async (req) => {
       action === "commerce" &&
       req.method === "POST"
     ) {
-      const body = await req.json();
+      let student = "";
+      let level = "";
+      let place = "";
+      let category = "";
+      let recommendation = "";
+      let directions = "";
+      let lat;
+      let lng;
+      let image = null;
 
-      const student =
-        String(body.student_name || "").trim();
+      if (isMultipart(req)) {
+        const form = await req.formData();
 
-      const level =
-        String(body.level || "").trim();
+        student =
+          String(
+            form.get("student_name") || ""
+          ).trim();
 
-      const place =
-        String(body.place_name || "").trim();
+        level =
+          String(
+            form.get("level") || ""
+          ).trim();
 
-      const lat =
-        Number(body.latitude);
+        place =
+          String(
+            form.get("place_name") || ""
+          ).trim();
 
-      const lng =
-        Number(body.longitude);
+        category =
+          String(
+            form.get("category") || ""
+          );
+
+        recommendation =
+          String(
+            form.get("recommendation") || ""
+          );
+
+        directions =
+          String(
+            form.get("directions") || ""
+          );
+
+        lat =
+          Number(
+            form.get("latitude")
+          );
+
+        lng =
+          Number(
+            form.get("longitude")
+          );
+
+        const maybeImage =
+          form.get("image");
+
+        if (
+          maybeImage instanceof File &&
+          maybeImage.size > 0
+        ) {
+          image = maybeImage;
+        }
+
+      } else {
+
+        const body =
+          await req.json();
+
+        student =
+          String(
+            body.student_name || ""
+          ).trim();
+
+        level =
+          String(
+            body.level || ""
+          ).trim();
+
+        place =
+          String(
+            body.place_name || ""
+          ).trim();
+
+        category =
+          String(
+            body.category || ""
+          );
+
+        recommendation =
+          String(
+            body.recommendation || ""
+          );
+
+        directions =
+          String(
+            body.directions || ""
+          );
+
+        lat =
+          Number(
+            body.latitude
+          );
+
+        lng =
+          Number(
+            body.longitude
+          );
+      }
 
       if (
         !student ||
@@ -196,12 +311,14 @@ export default async (req) => {
         );
       }
 
-      const count = await db.sql`
-        SELECT COUNT(*)::int AS count
-        FROM fle_student_places
-      `;
+      const count =
+        await db.sql`
+          SELECT COUNT(*)::int AS count
+          FROM fle_student_places
+        `;
 
-      const id = uuid();
+      const id =
+        uuid();
 
       await db.sql`
         INSERT INTO fle_student_places
@@ -222,14 +339,55 @@ export default async (req) => {
           ${student},
           ${level},
           ${place},
-          ${String(body.category || "")},
-          ${String(body.recommendation || "")},
-          ${String(body.directions || "")},
+          ${category},
+          ${recommendation},
+          ${directions},
           ${lat},
           ${lng},
           ${(count[0]?.count ?? 0) + 1}
         )
       `;
+
+      if (image) {
+        const imageType =
+          image.type ||
+          "application/octet-stream";
+
+        const imageKey =
+          `a12/${id}/image`;
+
+        await mediaStore.set(
+          imageKey,
+          await image.arrayBuffer(),
+          {
+            metadata: {
+              contentType:
+                imageType,
+              student,
+              kind:
+                "image"
+            }
+          }
+        );
+
+        await db.sql`
+          INSERT INTO fle_student_place_media
+          (
+            place_id,
+            image_key,
+            image_type
+          )
+          VALUES (
+            ${id},
+            ${imageKey},
+            ${imageType}
+          )
+          ON CONFLICT (place_id)
+          DO UPDATE SET
+            image_key = EXCLUDED.image_key,
+            image_type = EXCLUDED.image_type
+        `;
+      }
 
       return json(
         {
@@ -259,10 +417,21 @@ export default async (req) => {
         );
       }
 
+      const rows =
+        await db.sql`
+          SELECT image_key
+          FROM fle_student_place_media
+          WHERE place_id = ${id}
+        `;
+
       await db.sql`
         DELETE FROM fle_student_places
         WHERE id = ${id}
       `;
+
+      await deleteBlobQuietly(
+        rows[0]?.image_key
+      );
 
       return json({
         ok: true
@@ -318,7 +487,8 @@ export default async (req) => {
         );
       }
 
-      const id = uuid();
+      const id =
+        uuid();
 
       const safeAudioType =
         audio.type ||
@@ -327,10 +497,6 @@ export default async (req) => {
       const audioKey =
         `b1/${id}/audio`;
 
-      /*
-        Cette partie audio est volontairement
-        conservée comme dans la version fonctionnelle.
-      */
       await mediaStore.set(
         audioKey,
         await audio.arrayBuffer(),
@@ -348,9 +514,6 @@ export default async (req) => {
       let imageKey = null;
       let imageType = null;
 
-      /*
-        Cette partie photo est également conservée.
-      */
       if (
         image instanceof File &&
         image.size > 0
@@ -402,12 +565,6 @@ export default async (req) => {
           ${imageType}
         )
       `;
-
-      /*
-        Point personnel B1 :
-        facultatif pour garder compatibles
-        les anciens témoignages.
-      */
 
       const latitudeRaw =
         form.get("latitude");
@@ -479,13 +636,14 @@ export default async (req) => {
         );
       }
 
-      const rows = await db.sql`
-        SELECT
-          audio_key,
-          image_key
-        FROM fle_b1_contributions
-        WHERE id = ${id}
-      `;
+      const rows =
+        await db.sql`
+          SELECT
+            audio_key,
+            image_key
+          FROM fle_b1_contributions
+          WHERE id = ${id}
+        `;
 
       const contribution =
         rows[0];
@@ -500,20 +658,11 @@ export default async (req) => {
         );
       }
 
-      /*
-        La suppression de la contribution
-        supprime automatiquement son point personnel
-        grâce à ON DELETE CASCADE.
-      */
       await db.sql`
         DELETE FROM fle_b1_contributions
         WHERE id = ${id}
       `;
 
-      /*
-        On supprime seulement les fichiers
-        appartenant à CE témoignage.
-      */
       await deleteBlobQuietly(
         contribution.audio_key
       );
@@ -536,7 +685,10 @@ export default async (req) => {
 
       if (
         !key ||
-        !key.startsWith("b1/")
+        (
+          !key.startsWith("b1/") &&
+          !key.startsWith("a12/")
+        )
       ) {
         return new Response(
           "Invalid key",
@@ -547,11 +699,13 @@ export default async (req) => {
       }
 
       const entry =
-        await mediaStore.getWithMetadata(
+        await mediaStore
+        .getWithMetadata(
           key,
           {
             type:
               "arrayBuffer",
+
             consistency:
               "strong"
           }
